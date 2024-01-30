@@ -7,8 +7,18 @@ const AddRoute = () => {
 
       // Dynamically create the Bing Maps script element
       const script = document.createElement("script");
-      script.src = "https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=AhP_cuxI2i6AcohWfJLGvOobPxKH11eEfo0TeTDqcQ4PvapLEThf_FQ5OaMgAu-l";
+      //wait for the script to load before using the map
+      script.async = true;
+      script.defer = true;
+      script.src = `https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=AhP_cuxI2i6AcohWfJLGvOobPxKH11eEfo0TeTDqcQ4PvapLEThf_FQ5OaMgAu-l`;
+      
+
+      // Add the script to the page
       document.body.appendChild(script);
+      script.onerror = function() {
+        console.error('Error loading the Bing Maps script.');
+      };
+      
 
       script.onload = () => {
         // Initialize the map after the Bing Maps script is loaded
