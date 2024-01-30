@@ -3,20 +3,13 @@ import React, { useEffect } from 'react';
 const AddRoute = () => {
   useEffect(() => {
     const getMap = async () => {
-      const bingKey = "";
+      //const bingKey = "";
 
       // Dynamically create the Bing Maps script element
       const script = document.createElement("script");
-      //wait for the script to load before using the map
-      /* script.async = true; */
-      script.defer = true;
-      script.src = `https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=AhP_cuxI2i6AcohWfJLGvOobPxKH11eEfo0TeTDqcQ4PvapLEThf_FQ5OaMgAu-l`;
-      
-
-      // Add the script to the page
+      script.src = "https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=AhP_cuxI2i6AcohWfJLGvOobPxKH11eEfo0TeTDqcQ4PvapLEThf_FQ5OaMgAu-l";
       document.body.appendChild(script);
       
-
       script.onload = () => {
         // Initialize the map after the Bing Maps script is loaded
         const map = new window.Microsoft.Maps.Map('#myMap', {});
