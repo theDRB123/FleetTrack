@@ -6,6 +6,7 @@ import App from './App';
 import Dashboard from './Dashboard';
 import AddRoute from './AddRoute';
 import ViewRoutes from './ViewRoutes';
+import ViewRoute from './ViewRoute';
 import ErrorBoundary from './ErrorBoundary';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -29,6 +30,7 @@ root.render(
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/AddRoute" element={<AddRoute />} />
         <Route path="/ViewRoutes" element={<ViewRoutes />} />
+        <Route path="/ViewRoute/:routeName" element={<ViewRoute />} />
       </Routes>
     </Router>
     // {/* </ErrorBoundary> */}
