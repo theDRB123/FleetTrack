@@ -1,0 +1,47 @@
+html, body{
+    padding:0;
+    margin:0;
+    height:100%;
+}
+
+.directionsContainer{
+    width:380px;
+    height:100%;
+    overflow-y:auto;
+    float:left;
+}
+
+#myMap{
+    /* position:; */
+    width:calc(100% - 380px);
+    height:100%;
+    /* float:left; */
+}
+
+h1 {
+    color: aqua;
+    background-color: #363636;
+}
+
+#downloadButton {
+    position: absolute;
+    bottom: 50px;
+    right: 10px;
+    display: none;
+    width: auto;
+    height: auto;
+    background-color: #363636;
+    color: white;
+    padding: 14px 20px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+#downloadButton:hover {
+    background-color: white; 
+    color: black; 
+    border: 2px solid #363636;
+}
