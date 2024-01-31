@@ -37,7 +37,7 @@ const ViewRoutes = () => {
           </li>
         ))}
       </ul>
-      {selectedRoute && <ViewRoute key={selectedRoute} routeName={selectedRoute} />}
+      {selectedRoute && <ViewRoute key={selectedRoute} routeName={selectedRoute} />}{/* Reload everytime route is selected */}
     </div>
   );
 };

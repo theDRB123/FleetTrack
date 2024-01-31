@@ -36,6 +36,11 @@ const ViewRoutes = ({ routeName }) => {
   }
 
   const GetMap = () => {
+    if (locationData.length === 0) {
+        console.warn('Route data is empty');
+        alert('Error: Route data is empty');
+        return;
+    }
     let _map = new window.Microsoft.Maps.Map(document.getElementById('myMapView'), {});
     setMap(_map)
 
