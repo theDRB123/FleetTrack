@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Directions Input Panel - Bing Maps Samples</title>
+
+    <meta charset="utf-8" />
+	<link rel="shortcut icon" href="/favicon.ico"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="Microsoft maps, map, gis, API, SDK, Bing, Bing Maps" />
+    <meta name="author" content="Microsoft Bing Maps" />
+    <meta name="screenshot" content="screenshot.jpg" />
+    
+    <script>
+        var map;
+        var directionsManager;
+        var routePoints = [];
+
+        function GetMap()
+        {
+            console.log("map function used")
+            map = new Microsoft.Maps.Map('#myMap', {});
+
+            //Load the directions module.
+            Microsoft.Maps.loadModule('Microsoft.Maps.Directions', function () {
+                //Create an instance of the directions manager.
+                directionsManager = new Microsoft.Maps.Directions.DirectionsManager(map);
+
+                //Specify where to display the route instructions.
+                directionsManager.setRenderOptions({ itineraryContainer: '#directionsItinerary' });
+
+                //Specify the where to display the input panel
+                directionsManager.showInputPanel('directionsPanel');
+
+                // Add event handler for directions updated event.
+                Microsoft.Maps.Events.addHandler(directionsManager, 'directionsUpdated', function (e) {
+                    var routePath = e.route[0].routePath;
+                    for (var i = 0; i < routePath.length; i++) {
+                        routePoints.push([routePath[i].latitude, routePath[i].longitude]);
+                    }
+                    // Show the download button if routePoints is not empty
+                    if (routePoints.length > 0) {
+                        document.getElementById("downloadButton").style.display = "block";
+                    }
+                });
+            });
+        }
+
+        function downloadRoutePoints() {
+            var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(routePoints));
+            var downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href",     dataStr);
+            downloadAnchorNode.setAttribute("download", "routePoints.json");
+            document.body.appendChild(downloadAnchorNode); // required for firefox
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+
+        const getCoordinates = () => {
+            const url = "http://dev.virtualearth.net/REST/V1/Routes/Driving?wp.0=Minneapolis,MN&wp.1=St%20Paul,MN&optmz=distance&routeAttributes=routePath&key={BingMapsKey}"
+        }
+    </script>
+    
+    <style>
+        html, body{
+            padding:0;
+            margin:0;
+            height:100%;
+        }
+
+        .directionsContainer{
+            width:380px;
+            height:100%;
+            overflow-y:auto;
+            float:left;
+        }
+
+        #myMap{
+            position:relative;
+            width:calc(100% - 380px);
+            height:100%;
+            float:left;
+        }
+
+        #downloadButton {
+            position: absolute;
+            bottom: 50px;
+            right: 10px;
+            display: none;
+            width: auto;
+            height: auto;
+            background-color: #363636;
+            color: white;
+            padding: 14px 20px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            transition-duration: 0.4s;
+            cursor: pointer;
+        }
+
+        #downloadButton:hover {
+            background-color: white; 
+            color: black; 
+            border: 2px solid #363636;
+        }
+    </style>
+</head>
+<body>
+    <div class="directionsContainer">
+        <div id="directionsPanel"></div>
+        <div id="directionsItinerary"></div>
+    </div>
+    <div id="myMap"></div>
+    <button id="downloadButton" onclick="downloadRoutePoints()">Download Route Points</button>
+
+    <script>
+        // Dynamic load the Bing Maps Key and Script
+        // Get your own Bing Maps key at https://www.microsoft.com/maps
+        (async () => {
+            let script = document.createElement("script");
+            //let bingKey = await fetch("https://samples.azuremaps.com/api/GetBingMapsKey").then(r => r.text()).then(key => { return key });
+            script.setAttribute("src", `https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=AhP_cuxI2i6AcohWfJLGvOobPxKH11eEfo0TeTDqcQ4PvapLEThf_FQ5OaMgAu-l`);
+            document.body.appendChild(script);
+        })();
+        
+    </script>
+</body>
+</html>

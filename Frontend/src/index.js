@@ -9,9 +9,18 @@ import ViewRoutes from './ViewRoutes';
 import ErrorBoundary from './ErrorBoundary';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+const loadScript = () => {
+  let script = document.createElement("script");
+  script.setAttribute("src", `https://www.bing.com/api/maps/mapcontrol?callback=loadMapModule&key=AhP_cuxI2i6AcohWfJLGvOobPxKH11eEfo0TeTDqcQ4PvapLEThf_FQ5OaMgAu-l`);
+  document.body.appendChild(script);
+}
+
+loadScript()
+
 root.render(
-  <StrictMode>
-  <ErrorBoundary>
+  // <StrictMode>
+  // <ErrorBoundary>
     <Router>
       <Routes>
         <Route path="/" element={<App />} />
@@ -20,6 +29,6 @@ root.render(
         <Route path="/ViewRoutes" element={<ViewRoutes />} />
       </Routes>
     </Router>
-    </ErrorBoundary>
-  </StrictMode>
+    // {/* </ErrorBoundary> */}
+  // </StrictMode>
 );

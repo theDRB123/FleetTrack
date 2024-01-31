@@ -1,28 +1,25 @@
 import './AddRoute.css';
-import  coordData from './data/routeCoods.json';
-import React, { useEffect , useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
 const AddRoute = () => {
   var map;
   var directionsManager;
-  var routePoints = [];
-  const [routeSelected , setRouteSelected] = useState(false);
+  const [routePointsArray, setRoutePointsArray] = useState([[0, 0]]);
+  const [routeSelected, setRouteSelected] = useState(false);
+  const [startingPoint, setStartingPoint] = useState("");
+  const [endingPoint, setEndingPoint] = useState("");
 
-  (async () => {
-    let script = document.createElement("script");
-    script.setAttribute("src", `https://www.bing.com/api/maps/mapcontrol?callback=loadMapModule&key=AhP_cuxI2i6AcohWfJLGvOobPxKH11eEfo0TeTDqcQ4PvapLEThf_FQ5OaMgAu-l`);
-    document.body.appendChild(script);
-  })();
 
+  // (async () => {
+
+  // })()
+  console.log("Calling function...")
   window.loadMapModule = async () => {
     GetMap();
   }
+
   const GetMap = () => {
     console.log("Function used...")
-
-    if (!window.Microsoft) {
-      console.log("Microsoft is undefined")
-    }
     let map = new window.Microsoft.Maps.Map('#myMap', {});
 
     //Load the directions module.
@@ -39,24 +36,42 @@ const AddRoute = () => {
       // Add event handler for directions updated event.
       window.Microsoft.Maps.Events.addHandler(directionsManager, 'directionsUpdated', function (e) {
         const routePath = e.route[0].routePath;
+        const routePoints = [];
         for (var i = 0; i < routePath.length; i++) {
           routePoints.push([routePath[i].latitude, routePath[i].longitude]);
         }
-        setRouteSelected(true);
+        setRoutePointsArray(routePoints);
+        if (routePoints.length > 0) {
+          // document.getElementById("downloadButton").style.display = "block";
+          setRouteSelected(true);
+          // setStartingPoint(e.route[0].origin);
+          // setEndingPoint(e.route[0].destination);
+          console.log("Route selected")
+          console.log(e)
+        }
       });
     });
   }
 
-
-  // var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(routePoints));
-    // var downloadAnchorNode = document.createElement('a');
-    // downloadAnchorNode.setAttribute("href", dataStr);
-    // downloadAnchorNode.setAttribute("download", "routePoints.json");
-    // document.body.appendChild(downloadAnchorNode); // required for firefox
-    // downloadAnchorNode.click();
-    // downloadAnchorNode.remove();
-  function SaveRoutePoints() {
-    coordData.push(routePoints);
+  const SaveRoutePoints = () => {
+    const data = {
+      "name" : startingPoint + " to " + endingPoint,
+      "coords" : routePointsArray
+    }
+    console.log(routePointsArray)
+    // console.log(routePoints)
+    fetch('http://localhost:4000/addRoute', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        alert("Route points saved successfully");
+      });
   }
 
   const getCoordinates = () => {
@@ -75,8 +90,7 @@ const AddRoute = () => {
           </div>
         </div>
       </div>
-      {routeSelected && <button id="SaveButton" onClick={SaveRoutePoints}>Download Route Points</button>}
-      
+      {routeSelected && <button id="saveButton" onClick={SaveRoutePoints}>Save Route Points</button>}
     </>
   );
 };

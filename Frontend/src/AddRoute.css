@@ -46,11 +46,11 @@ h1 {
     background-color: #363636;
 }
 
-#downloadButton {
+#saveButton {
     position: fixed;
     z-index: 50;
     bottom: 50px;
-    right: 10px;
+    left: 10px;
     width: auto;
     height: auto;
     background-color: #363636;

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Bing Maps Route and Pushpin</title>
+    <script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?callback=GetMap' async defer></script>
+    <script type='text/javascript'>
+        function GetMap() {
+            var map = new Microsoft.Maps.Map(document.getElementById('myMap'), {
+                credentials: 'AhP_cuxI2i6AcohWfJLGvOobPxKH11eEfo0TeTDqcQ4PvapLEThf_FQ5OaMgAu-l'
+            });
+
+            // Array of locations
+            var locationData = [];
+            var locations = locationData.map(function (location) {
+                return new Microsoft.Maps.Location(location[0], location[1]);
+            });
+
+            var line = new Microsoft.Maps.Polyline(locations, {
+                strokeColor: 'blue',
+                strokeThickness: 3
+            });
+
+            map.entities.push(line);
+
+            var pushpin = new Microsoft.Maps.Pushpin(locations[0], null); // Last location
+            var startOptions = {
+                color: 'green', //Use green color for the start point
+                text: 'S' //Use 'S' as the text for the start point
+            };
+
+            var endOptions = {
+                color: 'red', //Use red color for the end point
+                text: 'E' //Use 'E' as the text for the end point
+            };
+
+            //Create pushpins for the start and end points using the options
+            var startPushpin = new Microsoft.Maps.Pushpin(locations[0], startOptions); // First location
+            var endPushpin = new Microsoft.Maps.Pushpin(locations[locations.length - 1], endOptions); // Last location
+            map.entities.push(pushpin);
+
+
+
+            //Add the pushpins to the map
+            map.entities.push(startPushpin);
+            map.entities.push(endPushpin);
+
+            for (i = 0; i < length(locations); i++) {
+                var index = map.entities.indexof(pushpin)
+                if (index != -1) {
+                    map.entities.removeAt(index);
+                }
+                pushpin = new Microsoft.Maps.Pushpin(locations[i], null)
+                sleep(2000).then(() => {
+                    map.entities.push(pushpin);                    
+                });
+            }
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }        
+    </script>
+</head>
+
+<body>
+    <div id="myMap" style="position:relative;width:600px;height:400px;"></div>
+</body>
+
+</html>
