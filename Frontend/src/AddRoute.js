@@ -1,36 +1,34 @@
 import './AddRoute.css';
-import React, { useEffect } from 'react';
+import  coordData from './data/routeCoods.json';
+import React, { useEffect , useState} from 'react';
 
 const AddRoute = () => {
   var map;
   var directionsManager;
   var routePoints = [];
+  const [routeSelected , setRouteSelected] = useState(false);
 
   (async () => {
     let script = document.createElement("script");
-    
     script.setAttribute("src", `https://www.bing.com/api/maps/mapcontrol?callback=loadMapModule&key=AhP_cuxI2i6AcohWfJLGvOobPxKH11eEfo0TeTDqcQ4PvapLEThf_FQ5OaMgAu-l`);
     document.body.appendChild(script);
   })();
-  
-  window.loadMapModule = function() {
-    if (typeof window.Microsoft === 'undefined' || typeof window.Microsoft.Maps === 'undefined') {
-      setTimeout(window.loadMapModule, 100); // Retry after 100 ms
-      return;
-    }
+
+  window.loadMapModule = async () => {
     GetMap();
   }
+  const GetMap = () => {
+    console.log("Function used...")
 
-  function GetMap() {
-
-    console.log("Function used")
-
+    if (!window.Microsoft) {
+      console.log("Microsoft is undefined")
+    }
     let map = new window.Microsoft.Maps.Map('#myMap', {});
 
     //Load the directions module.
-    window.Microsoft.Maps.loadModule('Microsoft.Maps.Directions', function () {
+    window.Microsoft.Maps.loadModule('Microsoft.Maps.Directions', () => {
       //Create an instance of the directions manager.
-      let directionsManager = new window.Microsoft.Maps.Directions.DirectionsManager(map);
+      directionsManager = new window.Microsoft.Maps.Directions.DirectionsManager(map);
 
       //Specify where to display the route instructions.
       directionsManager.setRenderOptions({ itineraryContainer: '#directionsItinerary' });
@@ -40,22 +38,25 @@ const AddRoute = () => {
 
       // Add event handler for directions updated event.
       window.Microsoft.Maps.Events.addHandler(directionsManager, 'directionsUpdated', function (e) {
-        var routePath = e.route[0].routePath;
+        const routePath = e.route[0].routePath;
         for (var i = 0; i < routePath.length; i++) {
           routePoints.push([routePath[i].latitude, routePath[i].longitude]);
         }
+        setRouteSelected(true);
       });
     });
   }
 
-  function downloadRoutePoints() {
-    var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(routePoints));
-    var downloadAnchorNode = document.createElement('a');
-    downloadAnchorNode.setAttribute("href", dataStr);
-    downloadAnchorNode.setAttribute("download", "routePoints.json");
-    document.body.appendChild(downloadAnchorNode); // required for firefox
-    downloadAnchorNode.click();
-    downloadAnchorNode.remove();
+
+  // var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(routePoints));
+    // var downloadAnchorNode = document.createElement('a');
+    // downloadAnchorNode.setAttribute("href", dataStr);
+    // downloadAnchorNode.setAttribute("download", "routePoints.json");
+    // document.body.appendChild(downloadAnchorNode); // required for firefox
+    // downloadAnchorNode.click();
+    // downloadAnchorNode.remove();
+  function SaveRoutePoints() {
+    coordData.push(routePoints);
   }
 
   const getCoordinates = () => {
@@ -64,13 +65,18 @@ const AddRoute = () => {
 
   return (
     <>
-      <div className="directionsContainer">
-        <div id="directionsPanel"></div>
-        <div id="directionsItinerary"></div>
+      <div className="container">
+        <div className="directionsContainer">
+          <div id="directionsPanel"></div>
+          <div id="directionsItinerary"></div>
+        </div>
+        <div className='map'>
+          <div id="myMap">
+          </div>
+        </div>
       </div>
-      <div id="myMap">
-      </div>
-      <button id="downloadButton" onClick={downloadRoutePoints}>Download Route Points</button>
+      {routeSelected && <button id="SaveButton" onClick={SaveRoutePoints}>Download Route Points</button>}
+      
     </>
   );
 };
