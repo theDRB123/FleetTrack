@@ -2,17 +2,11 @@ import './AddRoute.css';
 import React, { useEffect, useState } from 'react';
 
 const AddRoute = () => {
-  var map;
-  var directionsManager;
+  const [map, setMap] = useState(null);
+  let directionsManager;
   const [routePointsArray, setRoutePointsArray] = useState([[0, 0]]);
   const [routeSelected, setRouteSelected] = useState(false);
-  const [startingPoint, setStartingPoint] = useState("");
-  const [endingPoint, setEndingPoint] = useState("");
 
-
-  // (async () => {
-
-  // })()
   console.log("Calling function...")
   window.loadMapModule = async () => {
     GetMap();
@@ -20,12 +14,12 @@ const AddRoute = () => {
 
   const GetMap = () => {
     console.log("Function used...")
-    let map = new window.Microsoft.Maps.Map('#myMap', {});
-
-    //Load the directions module.
+    let _map = new window.Microsoft.Maps.Map('#myMap', {});
+    setMap(_map)
+    // Load the directions module.
     window.Microsoft.Maps.loadModule('Microsoft.Maps.Directions', () => {
       //Create an instance of the directions manager.
-      directionsManager = new window.Microsoft.Maps.Directions.DirectionsManager(map);
+      directionsManager = new window.Microsoft.Maps.Directions.DirectionsManager(_map);
 
       //Specify where to display the route instructions.
       directionsManager.setRenderOptions({ itineraryContainer: '#directionsItinerary' });
@@ -36,46 +30,79 @@ const AddRoute = () => {
       // Add event handler for directions updated event.
       window.Microsoft.Maps.Events.addHandler(directionsManager, 'directionsUpdated', function (e) {
         const routePath = e.route[0].routePath;
+        console.log("Route path")
+        console.log(e.route[0].routePath)
         const routePoints = [];
         for (var i = 0; i < routePath.length; i++) {
           routePoints.push([routePath[i].latitude, routePath[i].longitude]);
         }
         setRoutePointsArray(routePoints);
         if (routePoints.length > 0) {
-          // document.getElementById("downloadButton").style.display = "block";
           setRouteSelected(true);
-          // setStartingPoint(e.route[0].origin);
-          // setEndingPoint(e.route[0].destination);
           console.log("Route selected")
-          console.log(e)
         }
+        console.log(e.route[0])
       });
     });
   }
 
-  const SaveRoutePoints = () => {
-    const data = {
-      "name" : startingPoint + " to " + endingPoint,
-      "coords" : routePointsArray
-    }
-    console.log(routePointsArray)
-    // console.log(routePoints)
-    fetch('http://localhost:4000/addRoute', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        alert("Route points saved successfully");
+  const SaveRoutePoints = async () => {
+    try {
+      const startingPoint = await getName(routePointsArray[0][0], routePointsArray[0][1]);
+      const endingPoint = await getName(routePointsArray[routePointsArray.length - 1][0], routePointsArray[routePointsArray.length - 1][1]);
+
+      console.log("Starting point and ending point")
+      console.log(startingPoint)
+      console.log(endingPoint)
+
+      const data = {
+        "name": startingPoint.city +"_"+startingPoint.state+"_"+startingPoint.zipCode+"_to_" + endingPoint.city +"_"+endingPoint.state+"_"+endingPoint.zipCode,
+        "coords": routePointsArray
+      }
+
+      console.log(routePointsArray)
+
+      const response = await fetch('http://localhost:4000/addRoute', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
       });
+
+      const responseData = await response.json();
+      console.log(responseData);
+      alert("Route points saved successfully");
+    } catch (error) {
+      console.error(error);
+    }
   }
 
-  const getCoordinates = () => {
-    const url = "http://dev.virtualearth.net/REST/V1/Routes/Driving?wp.0=Minneapolis,MN&wp.1=St%20Paul,MN&optmz=distance&routeAttributes=routePath&key={BingMapsKey}"
+  const getNamePromise = async (latitude, longitude) => {
+    let searchManager = new window.Microsoft.Maps.Search.SearchManager(map);
+    let requestOptions = {
+      location: new window.Microsoft.Maps.Location(latitude, longitude)
+    };
+
+    return new Promise((resolve, reject) => {
+      requestOptions.callback = function (answer, userData) {
+      let city = answer.address.locality;
+      let state = answer.address.adminDistrict;
+      let zipCode = answer.address.postalCode;
+      resolve({ city, state, zipCode });
+      };
+      requestOptions.errorCallback = function (e) {
+        reject(e);
+      };
+      searchManager.reverseGeocode(requestOptions);
+    });
+  };
+
+  const getName = async (latitude, longitude) => {
+    const loc = await getNamePromise(latitude, longitude).then(location => {
+      return location
+    }).catch(error => console.log(error));
+    return loc
   }
 
   return (
