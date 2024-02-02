@@ -35,6 +35,12 @@ const ViewRoutes = ({ routeName }) => {
     GetMap();
   }
 
+  useEffect(() => {
+    if (locationData.length > 0) {
+      GetMap();
+    }
+  }, [locationData]);
+
   const GetMap = () => {
     if (locationData.length === 0) {
         console.warn('Route data is empty');
