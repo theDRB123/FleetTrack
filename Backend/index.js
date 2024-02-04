@@ -36,20 +36,19 @@ app.post('/addRoute', (req, res) => {
 
 //routenames api to send the names of the routes to the frontend
 app.get('/routenames', (req, res) => {
-    console.log("Routes requested")
-    let routeNames = [];
+    console.log("Routes requested");
+    let routes = [];
 
     // Read and parse the JSON file
     const dataPath = path.join(__dirname, 'data', 'routeCoods.json');
     const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 
     data.routeData.forEach(route => {
-        routeNames.push(route.name);
+        const { name, distance, estimatedTime } = route;
+        routes.push({ name, distance, estimatedTime });
     });
 
-    //console.log(routeNames);
-    res.send(routeNames);
-    res.end();
+    res.send(routes);
 });
 
 app.get('/routedata/:routeName', (req, res) => {
@@ -71,7 +70,7 @@ app.get('/routedata/:routeName', (req, res) => {
 
             if (route) {
                 //console.log(route.coords);
-                res.send(route.coords);
+                res.send(route);
             } else {
                 console.log('Route not found');
                 res.status(404).send('Route not found');

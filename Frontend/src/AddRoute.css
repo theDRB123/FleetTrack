@@ -19,7 +19,7 @@ html, body{
 .directionsContainer{
     margin-left: -2px;
     position: relative;
-    display: flex;
+    /* display: flex; */
     width:380px;
     height:100%;
     overflow-y:auto;
@@ -48,14 +48,14 @@ h1 {
 
 #saveButton {
     position: fixed;
-    z-index: 50;
-    bottom: 50px;
+    /* z-index: 50; */
+    top: 10px;
     left: 10px;
     width: auto;
     height: auto;
     background-color: #363636;
     color: white;
-    padding: 14px 20px;
+    padding: 10px 15px;
     text-align: center;
     text-decoration: none;
     font-size: 16px;

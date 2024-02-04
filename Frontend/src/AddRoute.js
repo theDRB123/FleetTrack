@@ -6,6 +6,8 @@ const AddRoute = () => {
   let directionsManager;
   const [routePointsArray, setRoutePointsArray] = useState([[0, 0]]);
   const [routeSelected, setRouteSelected] = useState(false);
+  const [routeEstimatedTime, setRouteEstimatedTime] = useState(null);
+  const [routeDistance, setRouteDistance] = useState(null);
 
   console.log("Calling function...")
   window.loadMapModule = async () => {
@@ -32,6 +34,16 @@ const AddRoute = () => {
         const routePath = e.route[0].routePath;
         console.log("Route path")
         console.log(e.route[0].routePath)
+        const time = e.route[0].routeLegs[0].summary.time;
+        setRouteEstimatedTime(time);
+        console.log("Estimated time")
+        console.log(time)
+        const distance = e.route[0].routeLegs[0].summary.distance;
+        setRouteDistance(distance);
+        console.log("Distance")
+        console.log(distance)
+        /* console.log("Route 0")
+        console.log(e.route[0]) */
         const routePoints = [];
         for (var i = 0; i < routePath.length; i++) {
           routePoints.push([routePath[i].latitude, routePath[i].longitude]);
@@ -57,7 +69,9 @@ const AddRoute = () => {
 
       const data = {
         "name": startingPoint.city +"_"+startingPoint.state+"_"+startingPoint.zipCode+"_to_" + endingPoint.city +"_"+endingPoint.state+"_"+endingPoint.zipCode,
-        "coords": routePointsArray
+        "coords": routePointsArray,
+        "estimatedTime": routeEstimatedTime,
+        "distance": routeDistance
       }
 
       console.log(routePointsArray)
@@ -73,6 +87,9 @@ const AddRoute = () => {
       const responseData = await response.json();
       console.log(responseData);
       alert("Route points saved successfully");
+      //redirect to dashboard
+      window.location.href = "/dashboard";
+
     } catch (error) {
       console.error(error);
     }

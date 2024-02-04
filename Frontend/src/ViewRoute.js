@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './ViewRoutes.css';
 import axios from 'axios';
+import './ViewRoutes.css';
 
 //this component will receive the route name from other component, it will fetch the route data from the server and display it on the map
 const ViewRoutes = ({ routeName }) => {
@@ -8,6 +9,7 @@ const ViewRoutes = ({ routeName }) => {
   const [routePointsArray, setRoutePointsArray] = useState([[0, 0]]);
   const [routeSelected, setRouteSelected] = useState(false);
   const [locationData, setLocationData] = useState([[0, 0]]);
+  const [routeData, setRouteData] = useState(null);
 
   console.log("Route name: ", routeName);
   // Function to fetch route data from the API
@@ -24,7 +26,11 @@ const ViewRoutes = ({ routeName }) => {
   useEffect(() => {
     if (routeName) {
       fetchRouteData(routeName)
-        .then(setLocationData)
+        .then((data) => {
+          console.log("Route data: ", data);
+          setRouteData(data);
+          setLocationData(data.coords);
+        })
         .catch(console.error);
       setRouteSelected(true);
     }
@@ -35,18 +41,28 @@ const ViewRoutes = ({ routeName }) => {
     GetMap();
   }
 
+  useEffect(() => {
+    if (locationData.length > 0) {
+      GetMap();
+    }
+  }, [locationData]);
+
   const GetMap = () => {
-    if (locationData.length === 0) {
+    if (locationData && locationData.length === 0) {
         console.warn('Route data is empty');
-        alert('Error: Route data is empty');
+        //alert('Error: Route data is empty');
         return;
     }
-    let _map = new window.Microsoft.Maps.Map(document.getElementById('myMapView'), {});
+    const locations = locationData.map(location => new window.Microsoft.Maps.Location(location[0], location[1]));
+    let _map = new window.Microsoft.Maps.Map(document.getElementById('myMapView'), {
+      center: locations[0]
+
+    });
     setMap(_map)
 
     //const locationData = [];
 
-    const locations = locationData.map(location => new window.Microsoft.Maps.Location(location[0], location[1]));
+    
 
     const line = new window.Microsoft.Maps.Polyline(locations, {
       strokeColor: 'blue',
