@@ -87,6 +87,9 @@ const AddRoute = () => {
       const responseData = await response.json();
       console.log(responseData);
       alert("Route points saved successfully");
+      //redirect to dashboard
+      window.location.href = "/dashboard";
+
     } catch (error) {
       console.error(error);
     }

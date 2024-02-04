@@ -1,5 +1,20 @@
 #myMapView {
-  position: relative;
-  height: 600px;
-  width: 900px;
+  height: calc(100vh);
+  width: calc(100vw)
 }
+
+.viewRoutes {
+  display: flex;
+  flex-direction: row;
+}
+
+.routesContainer {
+  padding: 30px;
+}
+
+/* .mapContainer {
+  display: flex;
+  width: auto;
+  height: auto;
+  background-color: black;
+} */
