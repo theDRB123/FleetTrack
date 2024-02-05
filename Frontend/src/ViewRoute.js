@@ -3,8 +3,8 @@ import './ViewRoutes.css';
 import axios from 'axios';
 import './ViewRoutes.css';
 
-//this component will receive the route name from other component, it will fetch the route data from the server and display it on the map
-const ViewRoutes = ({ routeName }) => {
+//this component will receive the route name from other component, it will fetch the route data from the server and display it on the map, also receive vehicle location
+const ViewRoutes = ({ routeName, vehicleCoordinate }) => {
   const [map, setMap] = useState(null);
   const [routePointsArray, setRoutePointsArray] = useState([[0, 0]]);
   const [routeSelected, setRouteSelected] = useState(false);
@@ -62,8 +62,6 @@ const ViewRoutes = ({ routeName }) => {
 
     //const locationData = [];
 
-    
-
     const line = new window.Microsoft.Maps.Polyline(locations, {
       strokeColor: 'blue',
       strokeThickness: 3,
@@ -79,6 +77,12 @@ const ViewRoutes = ({ routeName }) => {
     const endOptions = {
       color: 'red',
       text: 'E',
+    };
+
+    if(vehicleCoordinate) {
+      const vehicleLocation = new window.Microsoft.Maps.Location(vehicleCoordinate[0], vehicleCoordinate[1]);
+      const vehiclePushpin = new window.Microsoft.Maps.Pushpin(vehicleLocation, null);
+      _map.entities.push(vehiclePushpin);
     };
 
     const startPushpin = new window.Microsoft.Maps.Pushpin(locations[0], startOptions);
