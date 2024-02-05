@@ -42,25 +42,21 @@ const ViewRoutes = () => {
     <div className="viewRoutes">
       <div className="routesContainer">
         <h2>Routes</h2>
-        <ul>
-        {routes && routes.map((route) => (
-            <li key={route.name} onClick={() => handleRouteClick(route)}>
-              {route.name}
+        <div className="routeList">
+          {routes && routes.map((route) => (
+            <div key={route.name} className={`routeItem ${selectedRoute && selectedRoute.name === route.name ? 'selected' : ''}`} onClick={() => handleRouteClick(route)}>
+              <span className="routeName">{route.name}</span>
               {selectedRoute && selectedRoute.name === route.name && (
-                <div>
-                  <ul>
-                    <li>Distance: {route.distance} km</li>
-                    <li>
-                      Estimated Time:{" "}
-                      {convertToHoursAndMinutes(route.estimatedTime)}
-                    </li>
-                  </ul>
+                <div className="routeDetails">
+                  <p><strong>Distance:</strong> {route.distance} km</p>
+                  <p><strong>Estimated Time:</strong> {convertToHoursAndMinutes(route.estimatedTime)}</p>
                 </div>
               )}
-            </li>
+            </div>
           ))}
-      </ul>
+        </div>
       </div>
+
       <div className="mapContainer">
         { selectedRoute && <ViewRoute routeName={selectedRoute.name} />}
       </div>
