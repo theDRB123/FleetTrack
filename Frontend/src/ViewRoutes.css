@@ -1,7 +1,7 @@
-#myMapView {
+/* #myMapView {
   height: calc(100vh);
-  width: calc(70vw)
-}
+  width: calc(max-width)
+} */
 
 .viewRoutes {
   display: flex;
@@ -9,7 +9,7 @@
 }
 
 .routesContainer {
-  width: 30vw;
+  width: 25vw;
   display: flex;
   flex-direction: column;
   /* margin: 0 auto; */
@@ -48,9 +48,7 @@
   border-radius: 0 0 10px 10px;
 }
 
-/* .mapContainer {
-  display: flex;
-  width: auto;
-  height: auto;
-  background-color: black;
-} */
+.viewMapContainer {
+  height: calc(100vh);
+  width: calc(75vw)
+}

@@ -57,7 +57,7 @@ const ViewRoutes = () => {
         </div>
       </div>
 
-      <div className="mapContainer">
+      <div className="viewMapContainer">
         { selectedRoute && <ViewRoute routeName={selectedRoute.name} />}
       </div>
     </div>
