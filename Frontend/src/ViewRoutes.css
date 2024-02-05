@@ -1,6 +1,6 @@
 #myMapView {
   height: calc(100vh);
-  width: calc(100vw)
+  width: calc(70vw)
 }
 
 .viewRoutes {
@@ -9,7 +9,43 @@
 }
 
 .routesContainer {
-  padding: 30px;
+  width: 30vw;
+  display: flex;
+  flex-direction: column;
+  /* margin: 0 auto; */
+}
+
+.routesContainer {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.routeList {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.routeItem {
+  padding: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  background-color: #f5f5f5;
+}
+
+.routeItem:hover {
+  background-color: #e0e0e0;
+}
+
+.routeItem.selected {
+  background-color: #f5f5f5;
+}
+
+.routeDetails {
+  padding: 15px;
+  background-color: #dedddd;
+  border-radius: 0 0 10px 10px;
 }
 
 /* .mapContainer {

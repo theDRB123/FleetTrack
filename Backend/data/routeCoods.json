@@ -281,16 +281,6 @@
       "distance": 23.964
     }
   ],
-  "vehicleData": [
-    {
-      "name":"vehicle1",
-      "speed":80,
-      "maxLoad":10000
-    },
-    {
-      "name": "vehicle2",
-      "speed": 60,
-      "maxLoad": 15000
-    }
-  ]
+  "vehicleData": [{"vehicle_id":"vehicle2","max_load":15000},{"vehicle_id":"vehicle3","max_load":5000}],
+  "driverData": [{"name":"driver1","mobile":"1234567890"},{"name":"driver2","mobile":"9876543210"}]
 }

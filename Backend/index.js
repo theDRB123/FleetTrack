@@ -31,8 +31,85 @@ app.post('/addRoute', (req, res) => {
 
     res.send(data);
     res.end();
-}
-);
+});
+
+//add driver (name and mobile number) to the driver list
+app.post('/addDriver', (req, res) => {
+    const data = req.body;
+    console.log(data)
+    Data.driverData.push(data);
+
+    let formattedData = JSON.stringify(Data, null, 2);
+
+    // Remove newline characters and extra spaces in arrays
+    formattedData = formattedData.replace(/(\[\s*)([^\]]*?)(\s*\])/g, (match, p1, p2, p3) => {
+        return '[' + p2.replace(/\s/g, '') + ']';
+    });
+
+    fs.writeFile('./data/routeCoods.json', formattedData, function (err) {
+        if (err) throw err;
+        console.log('Saved!');
+    });
+
+    res.send(data);
+    res.end();
+});
+
+//add vehicle vehicle_id, max_load to vehicle list
+app.post('/addVehicle', (req, res) => {
+    const data = req.body;
+    console.log(data)
+    Data.vehicleData.push(data);
+
+    let formattedData = JSON.stringify(Data, null, 2);
+
+    // Remove newline characters and extra spaces in arrays
+    formattedData = formattedData.replace(/(\[\s*)([^\]]*?)(\s*\])/g, (match, p1, p2, p3) => {
+        return '[' + p2.replace(/\s/g, '') + ']';
+    });
+
+    fs.writeFile('./data/routeCoods.json', formattedData, function (err) {
+        if (err) throw err;
+        console.log('Saved!');
+    });
+
+    res.send(data);
+    res.end();
+});
+
+//send the list of drivers to the frontend
+app.get('/driverlist', (req, res) => {
+    console.log("Drivers requested");
+    let drivers = [];
+
+    // Read and parse the JSON file
+    const dataPath = path.join(__dirname, 'data', 'routeCoods.json');
+    const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+
+    data.driverData.forEach(driver => {
+        const { name, mobile } = driver;
+        drivers.push({ name, mobile });
+    });
+
+    res.send(drivers);
+});
+
+//send the list of vehicles to the frontend
+app.get('/vehiclelist', (req, res) => {
+    console.log("Vehicles requested");
+    let vehicles = [];
+
+    // Read and parse the JSON file
+    const dataPath = path.join(__dirname, 'data', 'routeCoods.json');
+    const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+
+    data.vehicleData.forEach(vehicle => {
+        const { vehicle_id, max_load } = vehicle;
+        vehicles.push({ vehicle_id, max_load });
+    });
+
+    res.send(vehicles);
+});
 
 //routenames api to send the names of the routes to the frontend
 app.get('/routenames', (req, res) => {
