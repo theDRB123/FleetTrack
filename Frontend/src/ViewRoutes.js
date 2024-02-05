@@ -10,6 +10,7 @@ const ViewRoutes = () => {
   // Fetch the route names from the server
   useEffect(() => {
     fetchRoutes().then(setRoutes);
+    setSelectedRoute(routes[0])
   }, []);
 
   // Fetch the route data when a route name is clicked

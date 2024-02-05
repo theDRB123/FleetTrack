@@ -162,3 +162,9 @@ app.get('/routedata/:routeName', (req, res) => {
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
 });
+
+
+
+//route format
+// {"name":"route1","coords":[]
+//     },
