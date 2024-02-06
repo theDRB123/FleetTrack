@@ -58,6 +58,12 @@ app.post('/addDriver', (req, res) => {
 //add vehicle vehicle_id, max_load to vehicle list
 app.post('/addVehicle', (req, res) => {
     const data = req.body;
+    //check if the vehicle_id already exists
+    const vehicleExists = Data.vehicleData.some(vehicle => vehicle.vehicle_id === data.vehicle_id);
+    if (vehicleExists) {
+        res.status(400).send('Vehicle already exists');
+        return;
+    }
     console.log(data)
     Data.vehicleData.push(data);
 
