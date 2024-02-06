@@ -94,7 +94,7 @@ app.get('/driverData', (req, res) => {
     res.send(drivers);
 });
 
-//send the list of vehicles to the frontend, file structure {"vehicle_id":"vehicle2","max_load":15000, "last_location": [23.16769,79.953978], "last_location_date_time": "2024-02-01T12:00:00Z"}
+//send the list of vehicles to the frontend
 app.get('/vehicleData', (req, res) => {
     console.log("Vehicles requested");
     let vehicles = [];
@@ -109,6 +109,31 @@ app.get('/vehicleData', (req, res) => {
     });
 
     res.send(vehicles);
+});
+
+app.post('/updateVehicleLocation', (req, res) => {
+    const data = req.body;
+    console.log(data)
+    Data.vehicleData.forEach(vehicle => {
+        if(vehicle.vehicle_id === data.vehicle_id) {
+            vehicle.last_location = data.location;
+            vehicle.last_location_date_time = new Date().toISOString();
+        }
+    });
+
+    let formattedData = JSON.stringify(Data, null, 2);
+
+    formattedData = formattedData.replace(/(\[\s*)([^\]]*?)(\s*\])/g, (match, p1, p2, p3) => {
+        return '[' + p2.replace(/\s/g, '') + ']';
+    });
+
+    fs.writeFile('./data/routeCoods.json', formattedData, function (err) {
+        if (err) throw err;
+        console.log('Saved!');
+    });
+
+    res.send(data);
+    res.end();
 });
 
 //routenames api to send the names of the routes to the frontend

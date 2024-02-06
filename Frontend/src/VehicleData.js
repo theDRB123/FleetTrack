@@ -7,7 +7,7 @@ const VehicleData = () => {
   const [map, setMap] = useState(null);
   const [vehicleData, setVehicleData] = useState(null);
   const [selectedVehicle, setSelectedVehicle] = useState(null);
-  const [vehicleCoordinate, setVehicleCoordinate] = useState([0, 0]);
+  const [vehicleCoordinate, setVehicleCoordinate] = useState(null);
   const [showAll, setShowAll] = useState(false);
   
   const fetchVehicleData = async () => {
@@ -28,7 +28,6 @@ const VehicleData = () => {
             .catch(console.error);
     }, []);
 
-    // Function to handle vehicle click
     const handleVehicleClick = (vehicle) => {
         setSelectedVehicle(vehicle);
         setVehicleCoordinate([vehicle.last_location[0], vehicle.last_location[1]]);
@@ -58,18 +57,19 @@ const VehicleData = () => {
     });
     setMap(_map)
 
-    if(showAll)
+    if(showAll && vehicleData)
     {
         vehicleData.forEach((vehicle, index) => {
             const vehicleLocation = new window.Microsoft.Maps.Location(vehicle.last_location[0], vehicle.last_location[1]);
-            const vehiclePushpin = new window.Microsoft.Maps.Pushpin(vehicleLocation, { title: vehicle.vehicle_id, color: randomColor() });
+            const vehiclePushpin = new window.Microsoft.Maps.Pushpin(vehicleLocation, { title: vehicle.vehicle_id, color: randomColor()});
             _map.entities.push(vehiclePushpin);
         });
     }
-    else if(vehicleCoordinate) {
+    else if(vehicleCoordinate && selectedVehicle) {
       const vehicleLocation = new window.Microsoft.Maps.Location(vehicleCoordinate[0], vehicleCoordinate[1]);
       const vehiclePushpin = new window.Microsoft.Maps.Pushpin(vehicleLocation, { title: selectedVehicle.vehicle_id });
       _map.entities.push(vehiclePushpin);
+      _map.setView({ center: vehicleLocation });
     };
   }
 
@@ -79,7 +79,7 @@ const VehicleData = () => {
             <h2>Vehicle Data</h2>
             <div className="vehicleList">
                 {vehicleData && vehicleData.map((vehicle) => (
-                    <div key={vehicle.vehicle_id} className={`vehicleItem ${selectedVehicle && selectedVehicle.vehicle_id === vehicle.vehicle_id ? 'selected' : ''}`} onClick={() => handleVehicleClick(vehicle)}>
+                    vehicle && <div key={vehicle.vehicle_id} className={`vehicleItem ${selectedVehicle && selectedVehicle.vehicle_id === vehicle.vehicle_id ? 'selected' : ''}`} onClick={() => handleVehicleClick(vehicle)}>
                         <span className="vehicleName">{vehicle.vehicle_id}</span>
                         {selectedVehicle && selectedVehicle.vehicle_id === vehicle.vehicle_id && (
                             <div className="vehicleDetails">
