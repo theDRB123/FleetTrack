@@ -4,27 +4,75 @@ import axios from 'axios';
 import randomColor from 'randomcolor';
 
 const VehicleData = () => {
-  const [map, setMap] = useState(null);
-  const [vehicleData, setVehicleData] = useState(null);
-  const [selectedVehicle, setSelectedVehicle] = useState(null);
-  const [vehicleCoordinate, setVehicleCoordinate] = useState(null);
-  const [showAll, setShowAll] = useState(false);
+    const [map, setMap] = useState(null);
+    const [vehicleData, setVehicleData] = useState(null);
+    const [selectedVehicle, setSelectedVehicle] = useState(null);
+    const [vehicleCoordinate, setVehicleCoordinate] = useState(null);
+    const [showAll, setShowAll] = useState(false);
+
+    const [showForm, setShowForm] = useState(false);
+    const [newVehicle, setNewVehicle] = useState({ vehicle_id: '', max_load: '', last_location: [], last_location_date_time: ''});
+
+    useEffect(() => {
+        const form = document.querySelector('.vehicleForm');
+        if (form) {
+          form.style.transform = showForm ? 'translateY(0)' : 'translateY(100%)';
+        }
+    }, [showForm]);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+          if (showForm && !document.querySelector('.vehicleForm').contains(event.target)) {
+            setShowForm(false);
+          }
+        };
+        document.addEventListener('click', handleClickOutside);
+        return () => {
+          document.removeEventListener('click', handleClickOutside);
+        };
+      }, [showForm]);
+      
+      const handleAddVehicleClick = (event) => {
+        event.stopPropagation(); // Prevent the click event from reaching the document
+        setShowForm(true);
+      };
+
+    const handleInputChange = (event) => {
+        setNewVehicle({ ...newVehicle, [event.target.name]: event.target.value });
+    };
+
+    const handleSaveClick = async () => {
+        if (!newVehicle.vehicle_id || !newVehicle.max_load) {
+            alert('Vehicle ID and Max Load cannot be empty');
+            return;
+        }
+        try {
+            await axios.post('http://localhost:4000/addVehicle', newVehicle);
+            await fetchVehicleData();
+        } catch (error) {
+            if(error.response.status === 400)
+            {
+                alert('Vehicle already exists');
+            }
+            console.error('Error adding vehicle', error);
+        }
+        setNewVehicle({ vehicle_id: '', max_load: '', last_location: [], last_location_date_time: '' });
+        setShowForm(false);
+    };
   
-  const fetchVehicleData = async () => {
-    try {
-        const response = await axios.get('http://localhost:4000/vehicledata');
-        return response.data;
-    } catch (error) {
-        console.error('Error fetching vehicle data:', error);
-    }
+    const fetchVehicleData = async () => {
+        try {
+            const response = await axios.get('http://localhost:4000/vehicledata');
+            console.log('Vehicle data:', response.data);
+            setVehicleData(response.data);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching vehicle data:', error);
+        }
     };
 
     useEffect(() => {
         fetchVehicleData()
-            .then((data) => {
-                console.log("Vehicle data: ", data);
-                setVehicleData(data);
-            })
             .catch(console.error);
     }, []);
 
@@ -76,6 +124,15 @@ const VehicleData = () => {
     };
   }
 
+  const stringToDate = (date_time) => {
+    if (date_time) {
+        const date = new Date(date_time);
+        return date.toLocaleString();
+    }
+    return "No details available";
+  }
+
+
   return (
     <div className= "vehicleData">
         <div className="vehicleDataContainer">
@@ -86,14 +143,25 @@ const VehicleData = () => {
                         <span className="vehicleName">{vehicle.vehicle_id}</span>
                         {selectedVehicle && selectedVehicle.vehicle_id === vehicle.vehicle_id && (
                             <div className="vehicleDetails">
-                                <p><strong>Location:</strong> {vehicle.last_location[0]}, {vehicle.last_location[1]}</p>
+                                <p><strong>Location:</strong> {vehicle.last_location && vehicle.last_location.length > 0 ? `${vehicle.last_location[0]}, ${vehicle.last_location[1]}` : 'No details available'}</p>
                                 <p><strong>Max load:</strong> {vehicle.max_load}</p>
+                                <p><strong>Last Location Date and Time:</strong> {stringToDate(vehicle.last_location_date_time)}</p>
                             </div>
                         )}
                     </div>
                 ))}
             </div>
-            <button id='showAllBtn' onClick={() => setShowAll(!showAll)}>{showAll ? 'Hide All' : 'Show All'}</button>
+            <div className="buttonsContainer">
+                <button id='showAllBtn' onClick={() => setShowAll(!showAll)}>{showAll ? 'Hide All' : 'Show All'}</button>
+                <button id='addVehicleBtn' onClick={handleAddVehicleClick}>Add Vehicle</button>
+            </div>
+            {showForm && (
+                <div className="vehicleForm">
+                    <input name="vehicle_id" value={newVehicle.vehicle_id} onChange={handleInputChange} placeholder="Vehicle ID" />
+                    <input name="max_load" value={newVehicle.max_load} onChange={handleInputChange} placeholder="Max Load" />
+                    <button onClick={handleSaveClick}>Save</button>
+                </div>
+            )}
         </div>
         <div className="vehicleDataMapContainer">
             <div id="myMapView"/>
