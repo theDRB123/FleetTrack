@@ -60,12 +60,15 @@ const VehicleData = () => {
     if(showAll && vehicleData)
     {
         vehicleData.forEach((vehicle, index) => {
-            const vehicleLocation = new window.Microsoft.Maps.Location(vehicle.last_location[0], vehicle.last_location[1]);
-            const vehiclePushpin = new window.Microsoft.Maps.Pushpin(vehicleLocation, { title: vehicle.vehicle_id, color: randomColor()});
-            _map.entities.push(vehiclePushpin);
+            if(vehicle.last_location.length > 0)
+            {
+                const vehicleLocation = new window.Microsoft.Maps.Location(vehicle.last_location[0], vehicle.last_location[1]);
+                const vehiclePushpin = new window.Microsoft.Maps.Pushpin(vehicleLocation, { title: vehicle.vehicle_id, color: randomColor()});
+                _map.entities.push(vehiclePushpin);
+            }
         });
     }
-    else if(vehicleCoordinate && selectedVehicle) {
+    else if(vehicleCoordinate && selectedVehicle && selectedVehicle.last_location.length > 0) {
       const vehicleLocation = new window.Microsoft.Maps.Location(vehicleCoordinate[0], vehicleCoordinate[1]);
       const vehiclePushpin = new window.Microsoft.Maps.Pushpin(vehicleLocation, { title: selectedVehicle.vehicle_id });
       _map.entities.push(vehiclePushpin);
