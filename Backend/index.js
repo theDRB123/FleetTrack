@@ -78,7 +78,7 @@ app.post('/addVehicle', (req, res) => {
 });
 
 //send the list of drivers to the frontend
-app.get('/driverlist', (req, res) => {
+app.get('/driverData', (req, res) => {
     console.log("Drivers requested");
     let drivers = [];
 
@@ -94,8 +94,8 @@ app.get('/driverlist', (req, res) => {
     res.send(drivers);
 });
 
-//send the list of vehicles to the frontend
-app.get('/vehiclelist', (req, res) => {
+//send the list of vehicles to the frontend, file structure {"vehicle_id":"vehicle2","max_load":15000, "last_location": [23.16769,79.953978], "last_location_date_time": "2024-02-01T12:00:00Z"}
+app.get('/vehicleData', (req, res) => {
     console.log("Vehicles requested");
     let vehicles = [];
 
@@ -104,8 +104,8 @@ app.get('/vehiclelist', (req, res) => {
     const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 
     data.vehicleData.forEach(vehicle => {
-        const { vehicle_id, max_load } = vehicle;
-        vehicles.push({ vehicle_id, max_load });
+        const { vehicle_id, max_load, last_location, last_location_date_time } = vehicle;
+        vehicles.push({ vehicle_id, max_load, last_location, last_location_date_time });
     });
 
     res.send(vehicles);

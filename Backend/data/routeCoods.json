@@ -281,6 +281,12 @@
       "distance": 23.964
     }
   ],
-  "vehicleData": [{"vehicle_id":"vehicle2","max_load":15000},{"vehicle_id":"vehicle3","max_load":5000}],
-  "driverData": [{"name":"driver1","mobile":"1234567890"},{"name":"driver2","mobile":"9876543210"}]
+  "vehicleData": [
+    {"vehicle_id":"vehicle2","max_load":15000, "last_location": [23.16769,79.953978], "last_location_date_time": "2024-02-01T12:00:00Z"},
+    {"vehicle_id":"vehicle3","max_load":5000, "last_location": [23.16306,79.98586], "last_location_date_time": "2024-01-01T04:00:00Z"}
+  ],
+  "driverData": [
+    {"name":"driver1","mobile":"1234567890"},
+    {"name":"driver2","mobile":"9876543210"}
+  ]
 }
