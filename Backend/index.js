@@ -1,12 +1,14 @@
+
 const express = require('express');
 const cors = require('cors');
-
+const interpolate = require('./interpolate');
 const fs = require('fs');
 const path = require('path');
 const app = express();
 const port = 4000;
 
 let Data = require('./data/routeCoods.json');
+let InterData = require('./data/interpolatedRouteCoords.json');
 
 app.use(cors());
 app.use(express.json());
@@ -16,6 +18,8 @@ app.post('/addRoute', (req, res) => {
     console.log(data)
     Data.routeData.push(data);
 
+    let interpolatedCoords = interpolate(data.coords);
+    InterData.routeData.push(interpolatedCoords);
 
     let formattedData = JSON.stringify(Data, null, 2);
 
@@ -25,6 +29,16 @@ app.post('/addRoute', (req, res) => {
     });
 
     fs.writeFile('./data/routeCoods.json', formattedData, function (err) {
+        if (err) throw err;
+        console.log('Saved!');
+    });
+
+    formattedData = JSON.stringify(InterData, null, 2);
+    formattedData = formattedData.replace(/(\[\s*)([^\]]*?)(\s*\])/g, (match, p1, p2, p3) => {
+        return '[' + p2.replace(/\s/g, '') + ']';
+    });
+
+    fs.writeFile('./data/interpolatedRouteCoords.json', formattedData, function (err) {
         if (err) throw err;
         console.log('Saved!');
     });
