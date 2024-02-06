@@ -113,18 +113,6 @@ const ViewRoutes = ({ routeName, vehicleCoordinate }) => {
 
   const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'http://www.bing.com/api/maps/mapcontrol?key=AhP_cuxI2i6AcohWfJLGvOobPxKH11eEfo0TeTDqcQ4PvapLEThf_FQ5OaMgAu-l&callback=loadMapModule';
-    script.async = true;
-    script.defer = true;
-    document.body.appendChild(script);
-
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
-
   return (
     <div id="myMapView"/>
   );
