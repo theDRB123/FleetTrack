@@ -124,6 +124,15 @@ const VehicleData = () => {
     };
   }
 
+  const stringToDate = (date_time) => {
+    if (date_time) {
+        const date = new Date(date_time);
+        return date.toLocaleString();
+    }
+    return "No details available";
+  }
+
+
   return (
     <div className= "vehicleData">
         <div className="vehicleDataContainer">
@@ -134,8 +143,9 @@ const VehicleData = () => {
                         <span className="vehicleName">{vehicle.vehicle_id}</span>
                         {selectedVehicle && selectedVehicle.vehicle_id === vehicle.vehicle_id && (
                             <div className="vehicleDetails">
-                                <p><strong>Location:</strong> {vehicle.last_location[0]}, {vehicle.last_location[1]}</p>
+                                <p><strong>Location:</strong> {vehicle.last_location && vehicle.last_location.length > 0 ? `${vehicle.last_location[0]}, ${vehicle.last_location[1]}` : 'No details available'}</p>
                                 <p><strong>Max load:</strong> {vehicle.max_load}</p>
+                                <p><strong>Last Location Date and Time:</strong> {stringToDate(vehicle.last_location_date_time)}</p>
                             </div>
                         )}
                     </div>
