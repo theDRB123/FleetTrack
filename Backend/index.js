@@ -78,7 +78,7 @@ app.post('/addVehicle', (req, res) => {
 });
 
 //send the list of drivers to the frontend
-app.get('/driverlist', (req, res) => {
+app.get('/driverData', (req, res) => {
     console.log("Drivers requested");
     let drivers = [];
 
@@ -95,7 +95,7 @@ app.get('/driverlist', (req, res) => {
 });
 
 //send the list of vehicles to the frontend
-app.get('/vehiclelist', (req, res) => {
+app.get('/vehicleData', (req, res) => {
     console.log("Vehicles requested");
     let vehicles = [];
 
@@ -104,11 +104,36 @@ app.get('/vehiclelist', (req, res) => {
     const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 
     data.vehicleData.forEach(vehicle => {
-        const { vehicle_id, max_load } = vehicle;
-        vehicles.push({ vehicle_id, max_load });
+        const { vehicle_id, max_load, last_location, last_location_date_time } = vehicle;
+        vehicles.push({ vehicle_id, max_load, last_location, last_location_date_time });
     });
 
     res.send(vehicles);
+});
+
+app.post('/updateVehicleLocation', (req, res) => {
+    const data = req.body;
+    console.log(data)
+    Data.vehicleData.forEach(vehicle => {
+        if(vehicle.vehicle_id === data.vehicle_id) {
+            vehicle.last_location = data.location;
+            vehicle.last_location_date_time = new Date().toISOString();
+        }
+    });
+
+    let formattedData = JSON.stringify(Data, null, 2);
+
+    formattedData = formattedData.replace(/(\[\s*)([^\]]*?)(\s*\])/g, (match, p1, p2, p3) => {
+        return '[' + p2.replace(/\s/g, '') + ']';
+    });
+
+    fs.writeFile('./data/routeCoods.json', formattedData, function (err) {
+        if (err) throw err;
+        console.log('Saved!');
+    });
+
+    res.send(data);
+    res.end();
 });
 
 //routenames api to send the names of the routes to the frontend
