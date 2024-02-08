@@ -18,8 +18,6 @@ const loadScript = () => {
   document.body.appendChild(script);
 }
 
-
-
 loadScript()
 
 root.render(

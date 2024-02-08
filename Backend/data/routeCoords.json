@@ -1,9 +1,5 @@
 {
-  "routeData": [{"name":"","coords":[]
-    },
-    {
-      "name": "Jabalpur_MP_482004_to_Bhopal_MP_462042",
-      "coords": [[23.16586,79.93229],
+  "routeData": [{"name":"Jabalpur_MP_482004_to_Bhopal_MP_462042","coords":[[23.16586,79.93229],
         [23.165823,79.932227],
         [23.165684,79.932115],
         [23.165448,79.932113],
@@ -2285,5 +2281,16 @@
       "estimatedTime": 16561,
       "distance": 304.973
     }
-  ]
+  ],
+  "vehicleData": [{"vehicle_id":"vehicle2","max_load":15000,"last_location":[23.165777,79.535872],
+      "last_location_date_time": "2024-02-07T06:14:41.320Z"
+    },
+    {
+      "vehicle_id": "vehicle3",
+      "max_load": 5000,
+      "last_location": [23.665777,79.935872],
+      "last_location_date_time": "2024-02-07T06:18:18.849Z"
+    }
+  ],
+  "driverData": [{"name":"driver1","mobile":"1234567890"},{"name":"driver2","mobile":"9876543210"}]
 }
