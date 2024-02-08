@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import ViewRoute from "./ViewRoute";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const ViewRoutes = () => {
+  const navigate = useNavigate();
   const [routes, setRoutes] = useState([]);
   const [selectedRoute, setSelectedRoute] = useState(null);
 
@@ -55,6 +56,9 @@ const ViewRoutes = () => {
               )}
             </div>
           ))}
+        </div>
+        <div class="routeButtons">
+          <button id="addRoute" onClick={() => navigate('/AddRoute')}>Add Route</button>
         </div>
       </div>
 
