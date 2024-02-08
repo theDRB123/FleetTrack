@@ -7,7 +7,7 @@ const interpolate = (coordinates) => {
         distance = getDistanceFromLatLonInKm(c1[0], c1[1], c2[0], c2[1])
         console.log("distance is ->" + distance);
 
-        if (distance > 0.1) {
+        if (distance > 0.2) {
             result.push(c1)
             while (distance > 0.1) {
                 midPoint = getMidPoint(c1[0], c1[1], c2[0], c2[1])
