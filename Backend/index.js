@@ -9,6 +9,7 @@ const port = 4000;
 
 let Data = require('./data/routeCoods.json');
 let InterData = require('./data/interpolatedRouteCoords.json');
+let TripData = require('./data/tripData.json');
 
 app.use(cors());
 app.use(express.json());
@@ -199,6 +200,32 @@ app.get('/routedata/:routeName', (req, res) => {
             }
         } catch (parseError) {
             console.error('Error parsing route data:', parseError);
+            res.status(500).send('Internal Server Error');
+        }
+    });
+});
+
+app.get('/tripData', (req, res) => {
+    console.log("Trip data requested");
+    const dataPath = path.join(__dirname, 'data', 'tripData.json');
+    fs.readFile(dataPath, 'utf8', (err, data) => {
+        if(err) {
+            console.log('Error reading trip data file:', err);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+
+        try {
+            const jsonData = JSON.parse(data);
+            const trips = jsonData.tripData;
+            if(trips) {
+                res.send(trips);
+            } else {
+                console.log('Trip data not found');
+                res.status(404).send('Trip data not found');
+            }
+        } catch (parseError) {
+            console.error('Error parsing trip data:', parseError);
             res.status(500).send('Internal Server Error');
         }
     });

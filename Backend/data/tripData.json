@@ -10,6 +10,17 @@
       "trip_end_date_time": "2019-07-01T00:00:00Z",
       "last_route_point_index": 50,
       "tripStatus": "COMPLETED"
+    },
+    {
+      "tripId": "2",
+      "routeName": "Jabalpur_MP_482005_to_Jabalpur_MP_482005",
+      "vehicleId": "vehicle3",
+      "driverId": "driver3",
+      "scheduled_date_time": "2023-07-01T00:00:00Z",
+      "trip_start_date_time": "2023-07-01T00:00:00Z",
+      "trip_end_date_time": "2023-07-01T00:00:00Z",
+      "last_route_point_index": 50,
+      "tripStatus": "ON GOING"
     }
   ]
 }
