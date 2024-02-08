@@ -285,6 +285,12 @@
       "max_load": 5000,
       "last_location": [23.665777,79.935872],
       "last_location_date_time": "2024-02-07T06:18:18.849Z"
+    },
+    {
+      "vehicle_id": "vehicle4",
+      "max_load": "10000",
+      "last_location": [],
+      "last_location_date_time": ""
     }
   ],
   "driverData": [{"name":"driver1","mobile":"1234567890"},{"name":"driver2","mobile":"9876543210"}]

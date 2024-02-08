@@ -1,0 +1,15 @@
+{
+  "tripData": [
+    {
+      "tripId": "1",
+      "routeName": "Jabalpur_MP_482005_to_Jabalpur_MP_482005",
+      "vehicleId": "vehicle2",
+      "driverId": "driver2",
+      "scheduled_date_time": "2019-07-01T00:00:00Z",
+      "trip_start_date_time": "2019-07-01T00:00:00Z",
+      "trip_end_date_time": "2019-07-01T00:00:00Z",
+      "last_route_point_index": 50,
+      "tripStatus": "COMPLETED"
+    }
+  ]
+}

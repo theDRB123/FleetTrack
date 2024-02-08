@@ -10,6 +10,7 @@
 
 .routesContainer {
   width: 25vw;
+  height: 90vh;
   display: flex;
   flex-direction: column;
   padding: 15px;
@@ -47,4 +48,23 @@
 .viewMapContainer {
   height: calc(100vh);
   width: calc(75vw)
+}
+
+.routeButtons {
+  position: absolute;
+  bottom: 10px;
+}
+
+#addRoute {
+  background-color: #f5f5f5;
+  border: none;
+  color: black;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
 }
