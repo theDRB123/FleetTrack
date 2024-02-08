@@ -277,7 +277,7 @@
       "distance": 23.964
     }
   ],
-  "vehicleData": [{"vehicle_id":"vehicle2","max_load":15000,"last_location":[23.165777,79.535872],
+  "vehicleData": [{"vehicle_id":"vehicle2","max_load":15000,"last_location":[23.160053,79.980497],
       "last_location_date_time": "2024-02-07T06:14:41.320Z"
     },
     {
