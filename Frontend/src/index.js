@@ -24,7 +24,7 @@ loadScript()
 
 root.render(
   // <StrictMode>
-  // <ErrorBoundary>
+  <ErrorBoundary>
     <Router>
       <Routes>
         <Route path="/" element={<App />} />
@@ -35,6 +35,6 @@ root.render(
         <Route path="/VehicleData" element={<VehicleData />} />
       </Routes>
     </Router>
-    // {/* </ErrorBoundary> */}
+    </ErrorBoundary>
   // </StrictMode>
 );

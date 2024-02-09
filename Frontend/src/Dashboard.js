@@ -59,13 +59,13 @@ const Dashboard = () => {
     }
   };
 
-  /* useEffect(() => {
+  useEffect(() => {
     const interval = setInterval(() => {
       fetchVehicleData()
         .catch(console.error);
     }, 10000);
     return () => clearInterval(interval);
-  }, []); */
+  }, []);
 
   const stringToDate = (date_time) => {
     if (date_time) {
