@@ -7,7 +7,7 @@ const path = require('path');
 const app = express();
 const port = 4000;
 
-let Data = require('./data/routeCoods.json');
+let Data = require('./data/routeCoords.json');
 let InterData = require('./data/interpolatedRouteCoords.json');
 let TripData = require('./data/tripData.json');
 
@@ -20,7 +20,8 @@ app.post('/addRoute', (req, res) => {
     Data.routeData.push(data);
 
     let interpolatedCoords = interpolate(data.coords);
-    InterData.routeData.push(interpolatedCoords);
+    data.coords = interpolatedCoords;
+    InterData.routeData.push(data);
 
     let formattedData = JSON.stringify(Data, null, 2);
 
@@ -29,7 +30,7 @@ app.post('/addRoute', (req, res) => {
         return '[' + p2.replace(/\s/g, '') + ']';
     });
 
-    fs.writeFile('./data/routeCoods.json', formattedData, function (err) {
+    fs.writeFile('./data/routeCoords.json', formattedData, function (err) {
         if (err) throw err;
         console.log('Saved!');
     });
@@ -61,7 +62,7 @@ app.post('/addDriver', (req, res) => {
         return '[' + p2.replace(/\s/g, '') + ']';
     });
 
-    fs.writeFile('./data/routeCoods.json', formattedData, function (err) {
+    fs.writeFile('./data/routeCoords.json', formattedData, function (err) {
         if (err) throw err;
         console.log('Saved!');
     });
@@ -89,7 +90,7 @@ app.post('/addVehicle', (req, res) => {
         return '[' + p2.replace(/\s/g, '') + ']';
     });
 
-    fs.writeFile('./data/routeCoods.json', formattedData, function (err) {
+    fs.writeFile('./data/routeCoords.json', formattedData, function (err) {
         if (err) throw err;
         console.log('Saved!');
     });
@@ -104,7 +105,7 @@ app.get('/driverData', (req, res) => {
     let drivers = [];
 
     // Read and parse the JSON file
-    const dataPath = path.join(__dirname, 'data', 'routeCoods.json');
+    const dataPath = path.join(__dirname, 'data', 'routeCoords.json');
     const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 
     data.driverData.forEach(driver => {
@@ -121,7 +122,7 @@ app.get('/vehicleData', (req, res) => {
     let vehicles = [];
 
     // Read and parse the JSON file
-    const dataPath = path.join(__dirname, 'data', 'routeCoods.json');
+    const dataPath = path.join(__dirname, 'data', 'routeCoords.json');
     const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 
     data.vehicleData.forEach(vehicle => {
@@ -148,7 +149,7 @@ app.post('/updateVehicleLocation', (req, res) => {
         return '[' + p2.replace(/\s/g, '') + ']';
     });
 
-    fs.writeFile('./data/routeCoods.json', formattedData, function (err) {
+    fs.writeFile('./data/routeCoords.json', formattedData, function (err) {
         if (err) throw err;
         console.log('Saved!');
     });
@@ -163,7 +164,8 @@ app.get('/routenames', (req, res) => {
     let routes = [];
 
     // Read and parse the JSON file
-    const dataPath = path.join(__dirname, 'data', 'routeCoods.json');
+    // const dataPath = path.join(__dirname, 'data', 'routeCoords.json');
+    const dataPath = path.join(__dirname, 'data', 'routeCoords.json');
     const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 
     data.routeData.forEach(route => {
@@ -178,7 +180,7 @@ app.get('/routedata/:routeName', (req, res) => {
     console.log("Route data requested");
 
     // Read and parse the JSON file asynchronously
-    const dataPath = path.join(__dirname, 'data', 'routeCoods.json');
+    const dataPath = path.join(__dirname, 'data', 'routeCoords.json');
     
     fs.readFile(dataPath, 'utf8', (err, data) => {
         if (err) {

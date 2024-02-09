@@ -1,7 +1,22 @@
 import './AddRoute.css';
 import React, { useEffect, useState } from 'react';
 
+
+const loadScript = () => {
+  let script = document.createElement("script");
+  script.setAttribute("src", `https://www.bing.com/api/maps/mapcontrol?callback=loadMapModule&key=AhP_cuxI2i6AcohWfJLGvOobPxKH11eEfo0TeTDqcQ4PvapLEThf_FQ5OaMgAu-l`);
+  document.body.appendChild(script);
+}
+
+
+
+
 const AddRoute = () => {
+
+  useEffect(() => {
+    loadScript()
+  } , []);
+
   const [map, setMap] = useState(null);
   let directionsManager;
   const [routePointsArray, setRoutePointsArray] = useState([[0, 0]]);
@@ -68,7 +83,7 @@ const AddRoute = () => {
       console.log(endingPoint)
 
       const data = {
-        "name": startingPoint.city +"_"+startingPoint.state+"_"+startingPoint.zipCode+"_to_" + endingPoint.city +"_"+endingPoint.state+"_"+endingPoint.zipCode,
+        "name": startingPoint.city + "_" + startingPoint.state + "_" + startingPoint.zipCode + "_to_" + endingPoint.city + "_" + endingPoint.state + "_" + endingPoint.zipCode,
         "coords": routePointsArray,
         "estimatedTime": routeEstimatedTime,
         "distance": routeDistance
@@ -103,10 +118,10 @@ const AddRoute = () => {
 
     return new Promise((resolve, reject) => {
       requestOptions.callback = function (answer, userData) {
-      let city = answer.address.locality;
-      let state = answer.address.adminDistrict;
-      let zipCode = answer.address.postalCode;
-      resolve({ city, state, zipCode });
+        let city = answer.address.locality;
+        let state = answer.address.adminDistrict;
+        let zipCode = answer.address.postalCode;
+        resolve({ city, state, zipCode });
       };
       requestOptions.errorCallback = function (e) {
         reject(e);
