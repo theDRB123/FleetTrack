@@ -87,6 +87,7 @@ const Dashboard = () => {
         <Link to="/AddRoute" className="nav-link">Add route</Link>
         <Link to="/ViewRoutes" className="nav-link">Routes</Link>
         <Link to="/VehicleData" className="nav-link">Vehicles</Link>
+        <Link to="/DriverData" className="nav-link">Drivers</Link>
       </div>
     </div>
     <button className="menu-button" onClick={toggleMenu}>☰</button>

@@ -9,6 +9,7 @@ import ViewRoutes from './ViewRoutes';
 import ViewRoute from './ViewRoute';
 import ErrorBoundary from './ErrorBoundary';
 import VehicleData from './VehicleData';
+import DriverData from './DriverData';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -31,6 +32,7 @@ root.render(
         <Route path="/ViewRoutes" element={<ViewRoutes />} />
         <Route path="/ViewRoute/:routeName" element={<ViewRoute />} />
         <Route path="/VehicleData" element={<VehicleData />} />
+        <Route path="/DriverData" element={<DriverData />} />
       </Routes>
     </Router>
     //</ErrorBoundary>
