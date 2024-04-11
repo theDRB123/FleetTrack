@@ -1,4 +1,4 @@
-
+const mongoose = require('mongoose');
 const express = require('express');
 const cors = require('cors');
 const interpolate = require('./interpolate');
@@ -6,232 +6,230 @@ const fs = require('fs');
 const path = require('path');
 const app = express();
 const port = 4000;
+require('dotenv').config();
 
 let Data = require('./data/routeCoords.json');
-let InterData = require('./data/interpolatedRouteCoords.json');
 let TripData = require('./data/tripData.json');
+
+
+//importing the models
+const Route = require('./models/route')
+const Trip = require('./models/Trip')
+const Driver = require('./models/driver')
+const User = require('./models/user')
+const Vehicle = require('./models/vehicle')
+
+const connectMongo = async () => {
+    console.log("connecting to mongodb")
+
+    await mongoose.connect(process.env.MONGODB_URI)
+        .then(() => console.log('Connected to MongoDB'))
+        .catch(err => console.error('Could not connect to MongoDB', err));
+}
+
+connectMongo();
 
 app.use(cors());
 app.use(express.json());
 
-app.post('/addRoute', (req, res) => {
+const globalUserID = "test";
+
+app.post('/addRoute', async (req, res) => {
     const data = req.body;
-    console.log(data)
-    Data.routeData.push(data);
 
-    let interpolatedCoords = interpolate(data.coords);
-    data.coords = interpolatedCoords;
-    InterData.routeData.push(data);
+    //TODO Add user validation
 
-    let formattedData = JSON.stringify(Data, null, 2);
+    //create a new route
+    const route = new Route({
+        userID: globalUserID,
+        name: data.name,
+        distance: data.distance,
+        estimatedTime: data.estimatedTime,
+        coords: interpolate(data.coords)
+    })
 
-    // Remove newline characters and extra spaces in arrays
-    formattedData = formattedData.replace(/(\[\s*)([^\]]*?)(\s*\])/g, (match, p1, p2, p3) => {
-        return '[' + p2.replace(/\s/g, '') + ']';
-    });
-
-    fs.writeFile('./data/routeCoords.json', formattedData, function (err) {
-        if (err) throw err;
-        console.log('Saved!');
-    });
-
-    formattedData = JSON.stringify(InterData, null, 2);
-    formattedData = formattedData.replace(/(\[\s*)([^\]]*?)(\s*\])/g, (match, p1, p2, p3) => {
-        return '[' + p2.replace(/\s/g, '') + ']';
-    });
-
-    fs.writeFile('./data/interpolatedRouteCoords.json', formattedData, function (err) {
-        if (err) throw err;
-        console.log('Saved!');
-    });
-
-    res.send(data);
-    res.end();
-});
+    try {
+        await route.save();
+        console.log("savedRouteData")
+        res.send(data)
+    } catch (err) {
+        console.error(err)
+        res.status(500).send('Server error')
+    }
+})
 
 //add driver (name and mobile number) to the driver list
-app.post('/addDriver', (req, res) => {
+app.post('/addDriver', async (req, res) => {
     const data = req.body;
-    console.log(data)
-    Data.driverData.push(data);
 
-    let formattedData = JSON.stringify(Data, null, 2);
+    //TODO Add user validation
 
-    // Remove newline characters and extra spaces in arrays
-    formattedData = formattedData.replace(/(\[\s*)([^\]]*?)(\s*\])/g, (match, p1, p2, p3) => {
-        return '[' + p2.replace(/\s/g, '') + ']';
-    });
+    const driver = new Driver({
+        userID: globalUserID,
+        name: data.name,
+        mobileNumber: data.mobile
+    })
 
-    fs.writeFile('./data/routeCoords.json', formattedData, function (err) {
-        if (err) throw err;
-        console.log('Saved!');
-    });
-
-    res.send(data);
-    res.end();
+    try {
+        await driver.save();
+        console.log("savedDriverData")
+    } catch (err) {
+        console.error(err)
+        res.status(500).send('Server error')
+    }
 });
 
 //add vehicle vehicle_id, max_load to vehicle list
-app.post('/addVehicle', (req, res) => {
+app.post('/addVehicle', async (req, res) => {
     const data = req.body;
-    //check if the vehicle_id already exists
-    const vehicleExists = Data.vehicleData.some(vehicle => vehicle.vehicle_id === data.vehicle_id);
-    if (vehicleExists) {
-        res.status(400).send('Vehicle already exists');
-        return;
+
+    const vehicle = new Vehicle({
+        userID: globalUserID,
+        vehicleID: data.vehicleID,
+        max_load: data.max_load,
+        last_location: data.last_location,
+        last_location_date_time: data.last_location_data_time
+    })
+
+    //TODO check if the same vehicle is already existing
+
+    try {
+        await vehicle.save();
+        console.log("savedVehicleData")
+    } catch (err) {
+        console.error(err)
+        res.status(500).send('Server error')
     }
-    console.log(data)
-    Data.vehicleData.push(data);
-
-    let formattedData = JSON.stringify(Data, null, 2);
-
-    // Remove newline characters and extra spaces in arrays
-    formattedData = formattedData.replace(/(\[\s*)([^\]]*?)(\s*\])/g, (match, p1, p2, p3) => {
-        return '[' + p2.replace(/\s/g, '') + ']';
-    });
-
-    fs.writeFile('./data/routeCoords.json', formattedData, function (err) {
-        if (err) throw err;
-        console.log('Saved!');
-    });
-
-    res.send(data);
-    res.end();
 });
 
 //send the list of drivers to the frontend
-app.get('/driverData', (req, res) => {
+app.get('/driverData', async (req, res) => {
     console.log("Drivers requested");
-    let drivers = [];
 
-    // Read and parse the JSON file
-    const dataPath = path.join(__dirname, 'data', 'routeCoords.json');
-    const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
-
-    data.driverData.forEach(driver => {
-        const { name, mobile } = driver;
-        drivers.push({ name, mobile });
-    });
-
-    res.send(drivers);
+    try {
+        const drivers = await Driver.find({ userID: globalUserID }).select('name mobileNumber')
+        res.send(drivers);
+        res.end()
+    } catch (err) {
+        console.error(err)
+        res.status(500).send('server error')
+    }
 });
 
 //send the list of vehicles to the frontend
-app.get('/vehicleData', (req, res) => {
+app.get('/vehicleData', async (req, res) => {
     console.log("Vehicles requested");
-    let vehicles = [];
 
-    // Read and parse the JSON file
-    const dataPath = path.join(__dirname, 'data', 'routeCoords.json');
-    const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
-
-    data.vehicleData.forEach(vehicle => {
-        const { vehicle_id, max_load, last_location, last_location_date_time } = vehicle;
-        vehicles.push({ vehicle_id, max_load, last_location, last_location_date_time });
-    });
-
-    res.send(vehicles);
+    try {
+        const vehicles = await Vehicle.find({ userID: globalUserID })
+        res.send(vehicles)
+        res.end()
+    } catch (err) {
+        console.error(err)
+        res.status(500).send('server error')
+    }
 });
 
-app.post('/updateVehicleLocation', (req, res) => {
+app.post('/updateVehicleLocation', async (req, res) => {
     const data = req.body;
-    console.log(data)
-    Data.vehicleData.forEach(vehicle => {
-        if(vehicle.vehicle_id === data.vehicle_id) {
-            vehicle.last_location = data.location;
-            vehicle.last_location_date_time = new Date().toISOString();
-        }
-    });
+    console.log("updating vehicle location")
 
-    let formattedData = JSON.stringify(Data, null, 2);
+    //TODO Validate user before updating the vehicle location
 
-    formattedData = formattedData.replace(/(\[\s*)([^\]]*?)(\s*\])/g, (match, p1, p2, p3) => {
-        return '[' + p2.replace(/\s/g, '') + ']';
-    });
+    try {
+        const vehicle = await Vehicle.findOneAndUpdate(
+            {
+                userID: data.userID,
+                vehicleID: data.vehicleID
+            },
+            {
+                last_location: data.location,
+                last_location_date_time: new Date().toISOString()
+            },
+            { new: true }
+        )
 
-    fs.writeFile('./data/routeCoords.json', formattedData, function (err) {
-        if (err) throw err;
+        if (!vehicle) return res.status(404).send('Vehicle not found');
+
         console.log('Saved!');
-    });
-
-    res.send(data);
-    res.end();
+        res.send(vehicle);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server error');
+    }
 });
 
 //routenames api to send the names of the routes to the frontend
-app.get('/routenames', (req, res) => {
+app.get('/routenames', async (req, res) => {
     console.log("Routes requested");
-    let routes = [];
 
-    // Read and parse the JSON file
-    // const dataPath = path.join(__dirname, 'data', 'routeCoords.json');
-    const dataPath = path.join(__dirname, 'data', 'routeCoords.json');
-    const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+    console.log("Routes requested");
 
-    data.routeData.forEach(route => {
-        const { name, distance, estimatedTime } = route;
-        routes.push({ name, distance, estimatedTime });
-    });
-
-    res.send(routes);
+    try {
+        const routes = await Route.find().select('name distance estimatedTime');
+        res.send(routes);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server error');
+    }
 });
 
-app.get('/routedata/:routeName', (req, res) => {
+app.get('/routedata/:routeName', async (req, res) => {
     console.log("Route data requested");
 
-    // Read and parse the JSON file asynchronously
-    const dataPath = path.join(__dirname, 'data', 'routeCoords.json');
-    
-    fs.readFile(dataPath, 'utf8', (err, data) => {
-        if (err) {
-            console.error('Error reading route data file:', err);
-            res.status(500).send('Internal Server Error');
-            return;
-        }
-
-        try {
-            const jsonData = JSON.parse(data);
-            const route = jsonData.routeData.find(route => route.name === req.params.routeName);
-
-            if (route) {
-                //console.log(route.coords);
-                res.send(route);
-            } else {
-                console.log('Route not found');
-                res.status(404).send('Route not found');
-            }
-        } catch (parseError) {
-            console.error('Error parsing route data:', parseError);
-            res.status(500).send('Internal Server Error');
-        }
-    });
+    try {
+        const route = await Route.findOne({ userID: globalUserID, name: req.params.routeName });
+        if (!route) return res.status(404).send('Route not found');
+        res.send(route);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server error');
+    }
 });
 
-app.get('/tripData', (req, res) => {
+app.get('/tripData', async (req, res) => {
     console.log("Trip data requested");
-    const dataPath = path.join(__dirname, 'data', 'tripData.json');
-    fs.readFile(dataPath, 'utf8', (err, data) => {
-        if(err) {
-            console.log('Error reading trip data file:', err);
-            res.status(500).send('Internal Server Error');
-            return;
-        }
-
-        try {
-            const jsonData = JSON.parse(data);
-            const trips = jsonData.tripData;
-            if(trips) {
-                res.send(trips);
-            } else {
-                console.log('Trip data not found');
-                res.status(404).send('Trip data not found');
-            }
-        } catch (parseError) {
-            console.error('Error parsing trip data:', parseError);
-            res.status(500).send('Internal Server Error');
-        }
-    });
+    try {
+        const trips = await Trip.find({ userID: globalUserID });
+        res.send(trips);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server error');
+    }
 });
+
+app.post('/addTripData', async (req, res) => {
+    console.log("Adding Trip Data");
+    const data = req.body;
+
+    //TODO same as always, auth first
+
+
+    const trip = new Trip({
+        userID: globalUserID,
+        tripId: data.tripId,
+        routeName: data.routeName,
+        vehicleId: data.vehicleId,
+        driverId: data.driverId,
+        scheduled_date_time: data.scheduled_date_time,
+        trip_start_date_time: data.trip_start_date_time,
+        trip_end_date_time: data.trip_end_date_time,
+        last_route_point_index: data.last_route_point_index,
+        tripStatus: data.tripStatus
+    });
+
+    // Save the trip document to the database
+    try {
+        await trip.save();
+        console.log('Saved!');
+        res.send(trip);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server error');
+    }
+});
+
+
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
@@ -239,6 +237,3 @@ app.listen(port, () => {
 
 
 
-//route format
-// {"name":"route1","coords":[]
-//     },

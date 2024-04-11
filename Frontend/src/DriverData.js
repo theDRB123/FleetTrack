@@ -22,6 +22,7 @@ const DriverData = () => {
     const fetchDriverData = async () => {
         try {
             const response = await axios.get('http://localhost:4000/driverdata');
+            console.log(response.data)
             setDriverData(response.data);
         } catch (error) {
             console.error('Error fetching driver data:', error);
@@ -81,7 +82,7 @@ const DriverData = () => {
                             <span className="driverName">{driver.name}</span>
                             {selectedDriver && selectedDriver.name === driver.name && (
                                 <div className="driverDetails">
-                                    <p><strong>Mobile:</strong> {driver.mobile}</p>
+                                    <p><strong>Mobile:</strong> {driver.mobileNumber}</p>
                                 </div>
                             )}
                         </div>
