@@ -11,7 +11,7 @@ const VehicleData = () => {
     const [showAll, setShowAll] = useState(false);
 
     const [showForm, setShowForm] = useState(false);
-    const [newVehicle, setNewVehicle] = useState({ vehicle_id: '', max_load: '', last_location: [], last_location_date_time: ''});
+    const [newVehicle, setNewVehicle] = useState({ vehicleID: '', max_load: '', last_location: [], last_location_date_time: ''});
 
     useEffect(() => {
         const form = document.querySelector('.vehicleForm');
@@ -42,7 +42,7 @@ const VehicleData = () => {
     };
 
     const handleSaveClick = async () => {
-        if (!newVehicle.vehicle_id || !newVehicle.max_load) {
+        if (!newVehicle.vehicleID || !newVehicle.max_load) {
             alert('Vehicle ID and Max Load cannot be empty');
             return;
         }
@@ -56,14 +56,13 @@ const VehicleData = () => {
             }
             console.error('Error adding vehicle', error);
         }
-        setNewVehicle({ vehicle_id: '', max_load: '', last_location: [], last_location_date_time: '' });
+        setNewVehicle({ vehicleID: '', max_load: '', last_location: [], last_location_date_time: '' });
         setShowForm(false);
     };
   
     const fetchVehicleData = async () => {
         try {
             const response = await axios.get('http://localhost:4000/vehicledata');
-            console.log('Vehicle data:', response.data);
             setVehicleData(response.data);
             return response.data;
         } catch (error) {
@@ -111,14 +110,14 @@ const VehicleData = () => {
             if(vehicle.last_location.length > 0)
             {
                 const vehicleLocation = new window.Microsoft.Maps.Location(vehicle.last_location[0], vehicle.last_location[1]);
-                const vehiclePushpin = new window.Microsoft.Maps.Pushpin(vehicleLocation, { title: vehicle.vehicle_id, color: randomColor()});
+                const vehiclePushpin = new window.Microsoft.Maps.Pushpin(vehicleLocation, { title: vehicle.vehicleID, color: randomColor()});
                 _map.entities.push(vehiclePushpin);
             }
         });
     }
     else if(vehicleCoordinate && selectedVehicle && selectedVehicle.last_location.length > 0) {
       const vehicleLocation = new window.Microsoft.Maps.Location(vehicleCoordinate[0], vehicleCoordinate[1]);
-      const vehiclePushpin = new window.Microsoft.Maps.Pushpin(vehicleLocation, { title: selectedVehicle.vehicle_id });
+      const vehiclePushpin = new window.Microsoft.Maps.Pushpin(vehicleLocation, { title: selectedVehicle.vehicleID });
       _map.entities.push(vehiclePushpin);
       _map.setView({ center: vehicleLocation });
     };
@@ -139,9 +138,9 @@ const VehicleData = () => {
             <h2>Vehicle Data</h2>
             <div className="vehicleList">
                 {vehicleData && vehicleData.map((vehicle) => (
-                    vehicle && <div key={vehicle.vehicle_id} className={`vehicleItem ${selectedVehicle && selectedVehicle.vehicle_id === vehicle.vehicle_id ? 'selected' : ''}`} onClick={() => handleVehicleClick(vehicle)}>
-                        <span className="vehicleName">{vehicle.vehicle_id}</span>
-                        {selectedVehicle && selectedVehicle.vehicle_id === vehicle.vehicle_id && (
+                    vehicle && <div key={vehicle.vehicleID} className={`vehicleItem ${selectedVehicle && selectedVehicle.vehicleID === vehicle.vehicleID ? 'selected' : ''}`} onClick={() => handleVehicleClick(vehicle)}>
+                        <span className="vehicleName">{vehicle.vehicleID}</span>
+                        {selectedVehicle && selectedVehicle.vehicleID === vehicle.vehicleID && (
                             <div className="vehicleDetails">
                                 <p><strong>Location:</strong> {vehicle.last_location && vehicle.last_location.length > 0 ? `${vehicle.last_location[0]}, ${vehicle.last_location[1]}` : 'No details available'}</p>
                                 <p><strong>Max load:</strong> {vehicle.max_load}</p>
@@ -157,7 +156,7 @@ const VehicleData = () => {
             </div>
             {showForm && (
                 <div className="vehicleForm">
-                    <input name="vehicle_id" value={newVehicle.vehicle_id} onChange={handleInputChange} placeholder="Vehicle ID" />
+                    <input name="vehicleID" value={newVehicle.vehicleID} onChange={handleInputChange} placeholder="Vehicle ID" />
                     <input name="max_load" value={newVehicle.max_load} onChange={handleInputChange} placeholder="Max Load" />
                     <button onClick={handleSaveClick}>Save</button>
                 </div>
