@@ -13,7 +13,7 @@
 .driverList {
     border-radius: 10px;
     overflow: hidden;
-    height: 60vh;
+    height: 90vh;
 }
 
 .driverItem {
@@ -62,11 +62,14 @@
 }
 
 .driverForm {
-    width: 100%;
+    width: 25vw;
     background-color: #f8f8f8;
     padding: 20px;
     box-sizing: border-box;
     transition: transform 0.3s ease-out;
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
 }
   
 .driverForm input {
