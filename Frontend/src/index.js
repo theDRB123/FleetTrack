@@ -10,6 +10,7 @@ import ViewRoute from './ViewRoute';
 import ErrorBoundary from './ErrorBoundary';
 import VehicleData from './VehicleData';
 import DriverData from './DriverData';
+import Home from './Home';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -26,13 +27,14 @@ root.render(
     //<ErrorBoundary>
     <Router>
       <Routes>
-        <Route path="/" element={<App />} />
+        {/* <Route path="/" element={<App />} /> */}
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/AddRoute" element={<AddRoute />} />
         <Route path="/ViewRoutes" element={<ViewRoutes />} />
         <Route path="/ViewRoute/:routeName" element={<ViewRoute />} />
         <Route path="/VehicleData" element={<VehicleData />} />
         <Route path="/DriverData" element={<DriverData />} />
+        <Route path="/" element={<Home />} />
       </Routes>
     </Router>
     //</ErrorBoundary>

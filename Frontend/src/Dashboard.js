@@ -6,6 +6,7 @@ import VehicleData from './VehicleData';
 import ViewRoute from './ViewRoute';
 import axios from 'axios';
 import './Dashboard.css';
+import Headers from './Header';
 
 const Dashboard = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -78,7 +79,7 @@ const Dashboard = () => {
   return (
     <div className="Dashboard">
       <div className="dashNavbar">
-        <h2>Fleet Track</h2>
+        <Headers />
       </div>
       
       <div className={`slide-menu ${menuOpen ? 'open' : ''}`}>
