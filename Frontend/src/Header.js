@@ -34,7 +34,7 @@ const Headers = () => {
             <header>
                 <nav>
                     <div className="left">
-                        <h1>OAuth</h1>
+                        <h1>FleetTrack</h1>
                     </div>
                     <div className="right">
                         <ul>

@@ -47,7 +47,7 @@ const VehicleData = () => {
             return;
         }
         try {
-            await axios.post('http://localhost:4000/addVehicle', newVehicle);
+            await axios.post('http://localhost:4000/addVehicle', newVehicle, { withCredentials: true });
             await fetchVehicleData();
         } catch (error) {
             if(error.response.status === 400)
@@ -62,7 +62,7 @@ const VehicleData = () => {
   
     const fetchVehicleData = async () => {
         try {
-            const response = await axios.get('http://localhost:4000/vehicledata');
+            const response = await axios.get('http://localhost:4000/vehicledata', { withCredentials: true });
             setVehicleData(response.data);
             return response.data;
         } catch (error) {

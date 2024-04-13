@@ -21,7 +21,7 @@ const DriverData = () => {
 
     const fetchDriverData = async () => {
         try {
-            const response = await axios.get('http://localhost:4000/driverdata');
+            const response = await axios.get('http://localhost:4000/driverdata', { withCredentials: true });
             console.log(response.data)
             setDriverData(response.data);
         } catch (error) {
@@ -55,7 +55,7 @@ const DriverData = () => {
             return;
         }
         try {
-            await axios.post('http://localhost:4000/addDriver', newDriver);
+            await axios.post('http://localhost:4000/addDriver', newDriver, { withCredentials: true });
             await fetchDriverData();
         } catch (error) {
             if (error.response.status === 400) {
