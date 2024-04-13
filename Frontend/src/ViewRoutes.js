@@ -23,7 +23,7 @@ const ViewRoutes = () => {
   // Function to fetch route names from the API
   const fetchRoutes = async () => {
     try {
-      const response = await axios.get("http://localhost:4000/routenames");
+      const response = await axios.get("http://localhost:4000/routenames", { withCredentials: true });
       console.log(response.data);
       return response.data;
     } catch (error) {

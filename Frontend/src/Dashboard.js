@@ -6,6 +6,7 @@ import VehicleData from './VehicleData';
 import ViewRoute from './ViewRoute';
 import axios from 'axios';
 import './Dashboard.css';
+import Headers from './Header';
 
 const Dashboard = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -21,7 +22,7 @@ const Dashboard = () => {
 
   const fetchTripData = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/tripdata');
+      const response = await axios.get('http://localhost:4000/tripdata', { withCredentials: true });
       return response.data;
     } catch (error) {
       console.error('Error fetching trip data:', error);
@@ -43,7 +44,7 @@ const Dashboard = () => {
 
   const fetchVehicleData = async () => {
     try {
-        const response = await axios.get('http://localhost:4000/vehicledata');
+        const response = await axios.get('http://localhost:4000/vehicledata', { withCredentials: true });
         console.log('Vehicle data:', response.data);
         setVehicleData(response.data);
 
@@ -78,7 +79,7 @@ const Dashboard = () => {
   return (
     <div className="Dashboard">
       <div className="dashNavbar">
-        <h2>Fleet Track</h2>
+        <Headers />
       </div>
       
       <div className={`slide-menu ${menuOpen ? 'open' : ''}`}>

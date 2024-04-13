@@ -16,7 +16,7 @@ const ViewRoutes = ({ routeName, vehicleCoordinate }) => {
   const fetchRouteData = async (routeName) => {
     console.log("Route data requested")
     try {
-      const response = await axios.get(`http://localhost:4000/routedata/${routeName}`);
+      const response = await axios.get(`http://localhost:4000/routedata/${routeName}`, { withCredentials: true });
       return response.data;
     } catch (error) {
       console.error('Error fetching route data:', error);
