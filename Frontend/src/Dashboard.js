@@ -15,7 +15,7 @@ const Dashboard = () => {
   };
   const [tripData, setTripData] = useState([]);
   const [selectedTripId, setSelectedTripId] = useState(null);
-  const [routeName, setrouteName] = useState(null);
+  const [routeId, setrouteId] = useState(null);
   const [vehicleId, setVehicleId] = useState(null);
   const [vehicleCoordinate, setVehicleCoordinate] = useState(null);
   const [vehicleData, setVehicleData] = useState(null);
@@ -33,10 +33,10 @@ const Dashboard = () => {
     fetchTripData().then(setTripData);
   }, []);
 
-  const handleTripClick = (tripId, routeName, vehicleId) => {
-    console.log('Trip clicked:', tripId, routeName, vehicleId);
+  const handleTripClick = (tripId, routeId, vehicleId) => {
+    console.log('Trip clicked:', tripId, routeId, vehicleId);
     setSelectedTripId(tripId);
-    setrouteName(routeName);
+    setrouteId(routeId);
     setVehicleId(vehicleId);
     fetchVehicleData()
     .catch(console.error);
@@ -100,7 +100,7 @@ const Dashboard = () => {
           <div
             key={trip.tripId}
             className={`tripItem ${selectedTripId === trip.tripId ? 'selected' : ''}`}
-            onClick={() => handleTripClick(trip.tripId, trip.routeName, trip.vehicleId)}
+            onClick={() => handleTripClick(trip.tripId, trip.routeId, trip.vehicleId)}
           >
             <span className="tripName">{trip.tripId} {trip.routeName}</span>
             {selectedTripId === trip.tripId && (
@@ -112,7 +112,7 @@ const Dashboard = () => {
                 <strong>Driver name:</strong> {trip.driverId}
                 </p>
                 {/* <p>
-                  <strong>Route:</strong> {trip.routeName}
+                  <strong>Route:</strong> {trip.routeId}
                 </p> */}
                 <p>
                   <strong>Start Time:</strong> {stringToDate(trip.trip_start_date_time)}
@@ -129,7 +129,7 @@ const Dashboard = () => {
         ))}
     </div>
     <div className="tripMapContainer">
-      {routeName && <ViewRoute routeName={routeName} vehicleCoordinate={vehicleCoordinate} />}
+      {routeId && <ViewRoute routeId={routeId} vehicleCoordinate={vehicleCoordinate} />}
     </div>
     </div>
     </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './DriverData.css'; // Import your CSS file for driver data styling
+import './DriverData.css';
 import axios from 'axios';
 
 const DriverData = () => {
@@ -28,6 +28,26 @@ const DriverData = () => {
             console.error('Error fetching driver data:', error);
         }
     };
+
+    //delete driver
+    const deleteDriver = async (driverId) => {
+        try {
+            await axios.post('http://localhost:4000/deleteDriver',
+            { driverId },
+            { withCredentials: true });
+
+            await fetchDriverData();
+        } catch (error) {
+            console.error('Error deleting driver:', error);
+        }
+    };
+
+    //handle delete button click
+    const handleDeleteClick = (driverId) => {
+        if (window.confirm('Are you sure you want to delete this driver?')) {
+            deleteDriver(driverId);
+        }
+    }
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -83,6 +103,7 @@ const DriverData = () => {
                             {selectedDriver && selectedDriver.name === driver.name && (
                                 <div className="driverDetails">
                                     <p><strong>Mobile:</strong> {driver.mobileNumber}</p>
+                                    <p><button onClick={() => handleDeleteClick(driver._id)}>Delete</button></p>
                                 </div>
                             )}
                         </div>

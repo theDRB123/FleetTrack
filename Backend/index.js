@@ -145,11 +145,9 @@ app.get("/logout", (req, res) => {
     })
 });
 
-
+//add route
 app.post('/addRoute', checkAuthentication, async (req, res) => {
     const data = req.body;
-
-    //TODO Add user validation
 
     //create a new route
     const route = new Route({
@@ -170,7 +168,21 @@ app.post('/addRoute', checkAuthentication, async (req, res) => {
     }
 })
 
-//add driver (name and mobile number) to the driver list
+//delete route
+app.post('/deleteRoute', checkAuthentication, async (req, res) => {
+    const data = req.body;
+
+    try {
+        await Route.deleteOne({ userID: req.user.googleId, _id: data.routeId});
+        console.log("deletedRouteData")
+        res.send(data)
+    } catch (err) {
+        console.error(err)
+        res.status(500).send('Server error')
+    }
+})
+
+//add driver data
 app.post('/addDriver', checkAuthentication, async (req, res) => {
     const data = req.body;
 
@@ -182,7 +194,7 @@ app.post('/addDriver', checkAuthentication, async (req, res) => {
 
     try {
         await driver.save();
-        console.log("savedDriverData")
+        console.log("saved Driver Data")
         res.send(data)
     } catch (err) {
         console.error(err)
@@ -190,7 +202,21 @@ app.post('/addDriver', checkAuthentication, async (req, res) => {
     }
 });
 
-//add vehicle vehicle_id, max_load to vehicle list
+//delete driver
+app.post('/deleteDriver', checkAuthentication, async (req, res) => {
+    const data = req.body;
+
+    try {
+        await Driver.deleteOne({ userID: req.user.googleId, _id: data.driverId});
+        console.log("Deleted Driver Data")
+        res.send(data)
+    } catch (err) {
+        console.error(err)
+        res.status(500).send('Server error')
+    }
+})
+
+//add vehicle data
 app.post('/addVehicle', checkAuthentication, async (req, res) => {
     const data = req.body;
 
@@ -214,11 +240,25 @@ app.post('/addVehicle', checkAuthentication, async (req, res) => {
     }
 });
 
+//delete vehicle
+app.post('/deleteVehicle', checkAuthentication, async (req, res) => {
+    const data = req.body;
+
+    try {
+        await Vehicle.deleteOne({ userID: req.user.googleId, _id: data.vehicleId});
+        console.log("Deleted Vehicle Data")
+        res.send(data)
+    } catch (err) {
+        console.error(err)
+        res.status(500).send('Server error')
+    }
+})
+
 //send the list of drivers to the frontend
 app.get('/driverData', checkAuthentication, async (req, res) => {
     console.log("Drivers requested");
     try {
-        const drivers = await Driver.find({ userID: req.user.googleId }).select('name mobileNumber')
+        const drivers = await Driver.find({ userID: req.user.googleId }).select('name mobileNumber _id')
         res.send(drivers);
         res.end()
     } catch (err) {
@@ -244,8 +284,6 @@ app.get('/vehicleData', checkAuthentication, async (req, res) => {
 app.post('/updateVehicleLocation', checkAuthentication, async (req, res) => {
     const data = req.body;
     console.log("updating vehicle location")
-
-    //TODO Validate user before updating the vehicle location
 
     try {
         const vehicle = await Vehicle.findOneAndUpdate(
@@ -275,7 +313,7 @@ app.get('/routenames', checkAuthentication, async (req, res) => {
     console.log("Routes requested");
 
     try {
-        const routes = await Route.find({ userID: req.user.googleId }).select('name distance estimatedTime');
+        const routes = await Route.find({ userID: req.user.googleId }).select('name distance estimatedTime _id');
         res.send(routes);
     } catch (err) {
         console.error(err);
@@ -283,11 +321,11 @@ app.get('/routenames', checkAuthentication, async (req, res) => {
     }
 });
 
-app.get('/routedata/:routeName', checkAuthentication, async (req, res) => {
+app.get('/routedata/:routeId', checkAuthentication, async (req, res) => {
     console.log("Route data requested");
 
     try {
-        const route = await Route.findOne({ userID: req.user.googleId, name: req.params.routeName });
+        const route = await Route.findOne({ userID: req.user.googleId, _id: req.params.routeId});
         if (!route) return res.status(404).send('Route not found');
         res.send(route);
     } catch (err) {
@@ -300,6 +338,14 @@ app.get('/tripData', checkAuthentication, async (req, res) => {
     console.log("Trip data requested");
     try {
         const trips = await Trip.find({ userID: req.user.googleId });
+        //add driver name
+        for (let i = 0; i < trips.length; i++) {
+            const driver = await Driver.findOne({ userID: req.user.googleId, _id: trips[i].driverId }).select('name');
+            const vehicle = await Vehicle.findOne({ userID: req.user.googleId, _id: trips[i].vehicleId }).select('vehicleID');
+            console.log(driver);
+            trips[i].driverId = driver.name;
+            trips[i].vehicleId = vehicle.vehicleID;
+        }
         res.send(trips);
     } catch (err) {
         console.error(err);
@@ -310,9 +356,6 @@ app.get('/tripData', checkAuthentication, async (req, res) => {
 app.post('/addTripData', checkAuthentication, async (req, res) => {
     console.log("Adding Trip Data");
     const data = req.body;
-
-    //TODO same as always, auth first
-
 
     const trip = new Trip({
         userID: req.user.googleId,

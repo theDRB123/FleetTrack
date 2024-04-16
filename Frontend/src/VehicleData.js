@@ -81,6 +81,26 @@ const VehicleData = () => {
         setShowAll(false);
     };
 
+    //delete vehicle
+    const deleteVehicle = async (vehicleId) => {
+        try {
+            await axios.post('http://localhost:4000/deleteVehicle',
+            { vehicleId },
+            { withCredentials: true });
+
+            await fetchVehicleData();
+        } catch (error) {
+            console.error('Error deleting driver:', error);
+        }
+    };
+
+    //handle delete button click
+    const handleDeleteClick = (vehicleId) => {
+        if (window.confirm('Are you sure you want to delete this vehicle?')) {
+            deleteVehicle(vehicleId);
+        }
+    }
+
   window.loadMapModule = async () => {
     GetMap();
   }
@@ -145,6 +165,7 @@ const VehicleData = () => {
                                 <p><strong>Location:</strong> {vehicle.last_location && vehicle.last_location.length > 0 ? `${vehicle.last_location[0]}, ${vehicle.last_location[1]}` : 'No details available'}</p>
                                 <p><strong>Max load:</strong> {vehicle.max_load}</p>
                                 <p><strong>Last Location Date and Time:</strong> {stringToDate(vehicle.last_location_date_time)}</p>
+                                <p><button onClick={() => handleDeleteClick(vehicle._id)}>Delete</button></p>
                             </div>
                         )}
                     </div>
