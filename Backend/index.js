@@ -8,6 +8,7 @@ const app = express();
 const port = 4000;
 const session = require('express-session');
 const passport = require('passport');
+var generator = require('generate-password');
 const OAuth2Strategy = require("passport-google-oauth2").Strategy;
 const userdb = require("./models/userSchema");
 require('dotenv').config();
@@ -189,7 +190,8 @@ app.post('/addDriver', checkAuthentication, async (req, res) => {
     const driver = new Driver({
         userID: req.user.googleId,
         name: data.name,
-        mobileNumber: data.mobile
+        mobileNumber: data.mobile,
+        info: data.info
     })
 
     try {
@@ -199,6 +201,33 @@ app.post('/addDriver', checkAuthentication, async (req, res) => {
     } catch (err) {
         console.error(err)
         res.status(500).send('Server error')
+    }
+});
+
+app.post('/updateDriver', checkAuthentication, async (req, res) => {
+    const data = req.body;
+
+    try {
+        const driver = await Driver.findOneAndUpdate(
+            {
+                userID: req.user.googleId,
+                _id: data._id
+            },
+            {
+                name: data.name,
+                mobileNumber: data.mobile,
+                info: data.info
+            },
+            { new: true }
+        )
+
+        if (!driver) return res.status(404).send('Driver not found');
+
+        console.log('Saved!');
+        res.send(driver);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server error');
     }
 });
 
@@ -220,10 +249,19 @@ app.post('/deleteDriver', checkAuthentication, async (req, res) => {
 app.post('/addVehicle', checkAuthentication, async (req, res) => {
     const data = req.body;
 
+    var password = generator.generateMultiple(3, {
+        length: 10,
+        uppercase: true,
+        numbers: true,
+        lowercase: true
+    });
+
     const vehicle = new Vehicle({
         userID: req.user.googleId,
         vehicleID: data.vehicleID,
         max_load: data.max_load,
+        info: data.info,
+        password: password[0],
         last_location: data.last_location,
         last_location_date_time: data.last_location_data_time
     })
@@ -237,6 +275,33 @@ app.post('/addVehicle', checkAuthentication, async (req, res) => {
     } catch (err) {
         console.error(err)
         res.status(500).send('Server error')
+    }
+});
+
+app.post('/updateVehicle', checkAuthentication, async (req, res) => {
+    const data = req.body;
+
+    try {
+        const vehicle = await Vehicle.findOneAndUpdate(
+            {
+                userID: req.user.googleId,
+                _id: data._id
+            },
+            {
+                vehicleID: data.vehicleID,
+                max_load: data.max_load,
+                info: data.info
+            },
+            { new: true }
+        )
+
+        if (!vehicle) return res.status(404).send('Vehicle not found');
+
+        console.log('Saved!');
+        res.send(vehicle);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server error');
     }
 });
 
@@ -258,7 +323,7 @@ app.post('/deleteVehicle', checkAuthentication, async (req, res) => {
 app.get('/driverData', checkAuthentication, async (req, res) => {
     console.log("Drivers requested");
     try {
-        const drivers = await Driver.find({ userID: req.user.googleId }).select('name mobileNumber _id')
+        const drivers = await Driver.find({ userID: req.user.googleId }).select('name mobileNumber _id info')
         res.send(drivers);
         res.end()
     } catch (err) {
@@ -281,7 +346,7 @@ app.get('/vehicleData', checkAuthentication, async (req, res) => {
     }
 });
 
-app.post('/updateVehicleLocation', checkAuthentication, async (req, res) => {
+app.post('/updateVehicleLocation', async (req, res) => {
     const data = req.body;
     console.log("updating vehicle location")
 
@@ -289,7 +354,8 @@ app.post('/updateVehicleLocation', checkAuthentication, async (req, res) => {
         const vehicle = await Vehicle.findOneAndUpdate(
             {
                 userID: data.userID,
-                vehicleID: data.vehicleID
+                vehicleID: data.vehicleID,
+                password : data.password
             },
             {
                 last_location: data.location,
@@ -363,6 +429,7 @@ app.post('/addTripData', checkAuthentication, async (req, res) => {
         routeName: data.routeName,
         vehicleId: data.vehicleId,
         driverId: data.driverId,
+        info: data.info,
         scheduled_date_time: data.scheduled_date_time,
         trip_start_date_time: data.trip_start_date_time,
         trip_end_date_time: data.trip_end_date_time,

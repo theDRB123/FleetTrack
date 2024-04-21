@@ -4,6 +4,8 @@ const vehicleSchema = new mongoose.Schema({
     userID: String,
     vehicleID: String,
     max_load: Number,
+    info: String,
+    password: String,
     last_location: [Number],
     last_location_date_time: String,
 })

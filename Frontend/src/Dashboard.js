@@ -111,9 +111,9 @@ const Dashboard = () => {
                 <p>
                 <strong>Driver name:</strong> {trip.driverId}
                 </p>
-                {/* <p>
-                  <strong>Route:</strong> {trip.routeId}
-                </p> */}
+                <p>
+                  <strong>Extra info:</strong> {trip.info}
+                </p>
                 <p>
                   <strong>Start Time:</strong> {stringToDate(trip.trip_start_date_time)}
                 </p>
