@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import './DriverData.css'; // Import your CSS file for driver data styling
+import './DriverData.css';
 import axios from 'axios';
+import { set } from 'mongoose';
 
 const DriverData = () => {
     const [driverData, setDriverData] = useState(null);
     const [selectedDriver, setSelectedDriver] = useState(null);
     const [showForm, setShowForm] = useState(false);
-    const [newDriver, setNewDriver] = useState({ name: '', mobile: '' });
+    const [newDriver, setNewDriver] = useState({_id: '', name: '', mobile: '', info: ''});
+    const [updateForm, setUpdateForm] = useState(false);
 
     useEffect(() => {
         fetchDriverData();
@@ -29,17 +31,50 @@ const DriverData = () => {
         }
     };
 
-    useEffect(() => {
+    const handleAddDriverClick = (event) => {
+        // event.stopPropagation();
+        setShowForm(true);
+    };
+
+    //update driver
+    const handleUpdateClick = (driver) => {
+        setNewDriver( { _id: driver._id, name: driver.name, mobile: driver.mobileNumber, info: driver.info });
+        setUpdateForm(true);
+        setShowForm(true);
+    };
+
+    //delete driver
+    const deleteDriver = async (driverId) => {
+        try {
+            await axios.post('http://localhost:4000/deleteDriver',
+            { driverId },
+            { withCredentials: true });
+
+            await fetchDriverData();
+        } catch (error) {
+            console.error('Error deleting driver:', error);
+        }
+    };
+
+    //handle delete button click
+    const handleDeleteClick = (driverId) => {
+        if (window.confirm('Are you sure you want to delete this driver?')) {
+            deleteDriver(driverId);
+        }
+    }
+
+    /* useEffect(() => {
         const handleClickOutside = (event) => {
           if (showForm && !document.querySelector('.driverForm').contains(event.target)) {
-            setShowForm(false);
+            // setShowForm(false);
+            // setUpdateForm(false);
           }
         };
         document.addEventListener('click', handleClickOutside);
         return () => {
           document.removeEventListener('click', handleClickOutside);
         };
-      }, [showForm]);
+      }, [showForm]); */
 
     const handleDriverClick = (driver) => {
         setSelectedDriver(driver);
@@ -55,7 +90,14 @@ const DriverData = () => {
             return;
         }
         try {
-            await axios.post('http://localhost:4000/addDriver', newDriver, { withCredentials: true });
+            if(updateForm)
+            {
+                await axios.post('http://localhost:4000/updateDriver', newDriver, { withCredentials: true });
+            }
+            else
+            {
+                await axios.post('http://localhost:4000/addDriver', newDriver, { withCredentials: true });
+            }
             await fetchDriverData();
         } catch (error) {
             if (error.response.status === 400) {
@@ -63,13 +105,15 @@ const DriverData = () => {
             }
             console.error('Error adding driver', error);
         }
-        setNewDriver({ name: '', mobile: '' });
+        setNewDriver({_id: '', name: '', mobile: '', info: '' });
         setShowForm(false);
+        setUpdateForm(false);
     };
 
-    const handleAddDriverClick = (event) => {
-        event.stopPropagation();
-        setShowForm(true);
+    const handleCancelClick = () => {
+        setShowForm(false);
+        setUpdateForm(false);
+        setNewDriver({_id: '', name: '', mobile: '', info: '' });
     };
 
     return (
@@ -83,6 +127,11 @@ const DriverData = () => {
                             {selectedDriver && selectedDriver.name === driver.name && (
                                 <div className="driverDetails">
                                     <p><strong>Mobile:</strong> {driver.mobileNumber}</p>
+                                    <p><strong>Extra info:</strong> {driver.info}</p>
+                                    <p>
+                                        <button onClick={() => handleUpdateClick(driver)}>Edit</button>
+                                        <button onClick={() => handleDeleteClick(driver._id)}>Delete</button>
+                                    </p>
                                 </div>
                             )}
                         </div>
@@ -95,7 +144,9 @@ const DriverData = () => {
                     <div className="driverForm">
                         <input name="name" value={newDriver.name} onChange={handleInputChange} placeholder="Driver Name" />
                         <input name="mobile" value={newDriver.mobile} onChange={handleInputChange} placeholder="Mobile Number" />
+                        <input name="info" value={newDriver.info} onChange={handleInputChange} placeholder="Extra info" />
                         <button onClick={handleSaveClick}>Save</button>
+                        <button onClick={handleCancelClick}>Cancel</button>
                     </div>
                 )}
             </div>

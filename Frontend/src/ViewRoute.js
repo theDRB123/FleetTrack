@@ -4,19 +4,19 @@ import axios from 'axios';
 import './ViewRoutes.css';
 
 //this component will receive the route name from other component, it will fetch the route data from the server and display it on the map, also receive vehicle location
-const ViewRoutes = ({ routeName, vehicleCoordinate }) => {
+const ViewRoutes = ({ routeId, vehicleCoordinate }) => {
   const [map, setMap] = useState(null);
   const [routePointsArray, setRoutePointsArray] = useState([[0, 0]]);
   const [routeSelected, setRouteSelected] = useState(false);
   const [locationData, setLocationData] = useState([[0, 0]]);
   const [routeData, setRouteData] = useState(null);
 
-  console.log("Route name: ", routeName);
+  console.log("Route id: ", routeId);
   // Function to fetch route data from the API
-  const fetchRouteData = async (routeName) => {
+  const fetchRouteData = async (routeId) => {
     console.log("Route data requested")
     try {
-      const response = await axios.get(`http://localhost:4000/routedata/${routeName}`, { withCredentials: true });
+      const response = await axios.get(`http://localhost:4000/routedata/${routeId}`, { withCredentials: true });
       return response.data;
     } catch (error) {
       console.error('Error fetching route data:', error);
@@ -24,8 +24,8 @@ const ViewRoutes = ({ routeName, vehicleCoordinate }) => {
   };
 
   useEffect(() => {
-    if (routeName) {
-      fetchRouteData(routeName)
+    if (routeId) {
+      fetchRouteData(routeId)
         .then((data) => {
           console.log("Route data: ", data);
           setRouteData(data);
@@ -34,7 +34,7 @@ const ViewRoutes = ({ routeName, vehicleCoordinate }) => {
         .catch(console.error);
       setRouteSelected(true);
     }
-  }, [routeName]);
+  }, [routeId]);
     
 
   window.loadMapModule = async () => {

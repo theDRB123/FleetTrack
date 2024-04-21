@@ -63,7 +63,7 @@ const ViewRoutes = () => {
       </div>
 
       <div className="viewMapContainer">
-        { selectedRoute && <ViewRoute routeName={selectedRoute.name} />}
+        { selectedRoute && <ViewRoute routeId={selectedRoute._id} />}
       </div>
     </div>
   );

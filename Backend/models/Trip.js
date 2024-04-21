@@ -6,6 +6,7 @@ const tripSchema = new mongoose.Schema({
     routeName: String,
     vehicleId: String,
     driverId: String,
+    info: String,
     scheduled_date_time: Date,
     trip_start_date_time: Date,
     trip_end_date_time: Date,

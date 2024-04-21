@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './VehicleData.css';
 import axios from 'axios';
 import randomColor from 'randomcolor';
+import { set } from 'mongoose';
 
 const VehicleData = () => {
     const [map, setMap] = useState(null);
@@ -9,9 +10,10 @@ const VehicleData = () => {
     const [selectedVehicle, setSelectedVehicle] = useState(null);
     const [vehicleCoordinate, setVehicleCoordinate] = useState(null);
     const [showAll, setShowAll] = useState(false);
+    const [updateForm, setUpdateForm] = useState(false);
 
     const [showForm, setShowForm] = useState(false);
-    const [newVehicle, setNewVehicle] = useState({ vehicleID: '', max_load: '', last_location: [], last_location_date_time: ''});
+    const [newVehicle, setNewVehicle] = useState({ vehicleID: '', max_load: '', last_location: [], last_location_date_time: '', info: ''});
 
     useEffect(() => {
         const form = document.querySelector('.vehicleForm');
@@ -20,7 +22,7 @@ const VehicleData = () => {
         }
     }, [showForm]);
 
-    useEffect(() => {
+    /* useEffect(() => {
         const handleClickOutside = (event) => {
           if (showForm && !document.querySelector('.vehicleForm').contains(event.target)) {
             setShowForm(false);
@@ -30,10 +32,10 @@ const VehicleData = () => {
         return () => {
           document.removeEventListener('click', handleClickOutside);
         };
-      }, [showForm]);
+      }, [showForm]); */
       
       const handleAddVehicleClick = (event) => {
-        event.stopPropagation(); // Prevent the click event from reaching the document
+        // event.stopPropagation(); // Prevent the click event from reaching the document
         setShowForm(true);
       };
 
@@ -47,7 +49,14 @@ const VehicleData = () => {
             return;
         }
         try {
-            await axios.post('http://localhost:4000/addVehicle', newVehicle, { withCredentials: true });
+            if(updateForm)
+            {
+                await axios.post('http://localhost:4000/updateVehicle', newVehicle, { withCredentials: true });
+            }
+            else
+            {
+                await axios.post('http://localhost:4000/addVehicle', newVehicle, { withCredentials: true });
+            }
             await fetchVehicleData();
         } catch (error) {
             if(error.response.status === 400)
@@ -58,6 +67,7 @@ const VehicleData = () => {
         }
         setNewVehicle({ vehicleID: '', max_load: '', last_location: [], last_location_date_time: '' });
         setShowForm(false);
+        setUpdateForm(false);
     };
   
     const fetchVehicleData = async () => {
@@ -79,6 +89,38 @@ const VehicleData = () => {
         setSelectedVehicle(vehicle);
         setVehicleCoordinate([vehicle.last_location[0], vehicle.last_location[1]]);
         setShowAll(false);
+    };
+
+    //delete vehicle
+    const deleteVehicle = async (vehicleId) => {
+        try {
+            await axios.post('http://localhost:4000/deleteVehicle',
+            { vehicleId },
+            { withCredentials: true });
+
+            await fetchVehicleData();
+        } catch (error) {
+            console.error('Error deleting driver:', error);
+        }
+    };
+
+    const handleUpdateClick = (vehicle) => {
+        setNewVehicle( { _id: vehicle._id, vehicleID: vehicle.vehicleID, max_load: vehicle.max_load, info: vehicle.info });
+        setUpdateForm(true);
+        setShowForm(true);
+    };
+
+    //handle delete button click
+    const handleDeleteClick = (vehicleId) => {
+        if (window.confirm('Are you sure you want to delete this vehicle?')) {
+            deleteVehicle(vehicleId);
+        }
+    }
+
+    const handleCancelClick = () => {
+        setShowForm(false);
+        setUpdateForm(false);
+        setNewVehicle({ _id: '', vehicleID: '', max_load: '', last_location: [], last_location_date_time: '', info: '' });
     };
 
   window.loadMapModule = async () => {
@@ -144,7 +186,13 @@ const VehicleData = () => {
                             <div className="vehicleDetails">
                                 <p><strong>Location:</strong> {vehicle.last_location && vehicle.last_location.length > 0 ? `${vehicle.last_location[0]}, ${vehicle.last_location[1]}` : 'No details available'}</p>
                                 <p><strong>Max load:</strong> {vehicle.max_load}</p>
+                                <p><strong>Extra info:</strong> {vehicle.info} </p>
                                 <p><strong>Last Location Date and Time:</strong> {stringToDate(vehicle.last_location_date_time)}</p>
+                                <p><strong>Password:</strong> {vehicle.password}</p>
+                                <p>
+                                    <button onClick={() => handleUpdateClick(vehicle)}>Edit</button>
+                                    <button onClick={() => handleDeleteClick(vehicle._id)}>Delete</button>
+                                </p>
                             </div>
                         )}
                     </div>
@@ -158,7 +206,9 @@ const VehicleData = () => {
                 <div className="vehicleForm">
                     <input name="vehicleID" value={newVehicle.vehicleID} onChange={handleInputChange} placeholder="Vehicle ID" />
                     <input name="max_load" value={newVehicle.max_load} onChange={handleInputChange} placeholder="Max Load" />
+                    <input name="info" value={newVehicle.info} onChange={handleInputChange} placeholder="Extra info" />
                     <button onClick={handleSaveClick}>Save</button>
+                    <button onClick={handleCancelClick}>Cancel</button>
                 </div>
             )}
         </div>
