@@ -13,8 +13,8 @@ const OAuth2Strategy = require("passport-google-oauth2").Strategy;
 const userdb = require("./models/userSchema");
 require('dotenv').config();
 
-let Data = require('./data/routeCoords.json');
-let TripData = require('./data/tripData.json');
+/* let Data = require('./data/routeCoords.json');
+let TripData = require('./data/tripData.json'); */
 
 const clientid = process.env.GOOGLE_CLIENT_ID;
 const clientsecret = process.env.GOOGLE_CLIENT_SECRET;

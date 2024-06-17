@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import './VehicleData.css';
 import axios from 'axios';
 import randomColor from 'randomcolor';
-import { set } from 'mongoose';
 
 const VehicleData = () => {
     const [map, setMap] = useState(null);

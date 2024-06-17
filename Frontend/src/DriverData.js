@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './DriverData.css';
 import axios from 'axios';
-import { set } from 'mongoose';
 
 const DriverData = () => {
     const [driverData, setDriverData] = useState(null);
