@@ -50,7 +50,12 @@ connectMongo();
 // } */
 // // app.use(allowCrossDomain);
 app.use(cors({
-    origin: "http://localhost:3000",
+    origin: function(origin, callback){
+      // allow requests with no origin 
+      // (like mobile apps or curl requests)
+      if(!origin) return callback(null, true);
+      return callback(null, true);
+    },
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
 }));
@@ -490,9 +495,12 @@ app.post('/addTripData', checkAuthentication, async (req, res) => {
 app.post('/getDriverTrips', async (req, res) => {
     console.log("Getting Driver Trips");
     const data = req.body;
-    const driver = await Driver.findOne({ userID: data.userID, _id: data.driverId });
+    const driver = await Driver.findOne({ driverID: data.driverID, password: data.password });
+    
+    const userID = driver.userID;
+
     try {
-        const trips = await Trip.find({ userID: data.userID, driverId: data.driverId });
+        const trips = await Trip.find({ userID: userID, driverId: data.driverId });
         res.send(trips);
     } catch (err) {
         console.error(err);
