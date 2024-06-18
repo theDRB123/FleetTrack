@@ -6,7 +6,7 @@ const DriverData = () => {
     const [driverData, setDriverData] = useState(null);
     const [selectedDriver, setSelectedDriver] = useState(null);
     const [showForm, setShowForm] = useState(false);
-    const [newDriver, setNewDriver] = useState({_id: '', name: '', mobile: '', info: ''});
+    const [newDriver, setNewDriver] = useState({driverID: '', name: '', mobile: '', info: ''});
     const [updateForm, setUpdateForm] = useState(false);
 
     useEffect(() => {
@@ -37,7 +37,7 @@ const DriverData = () => {
 
     //update driver
     const handleUpdateClick = (driver) => {
-        setNewDriver( { _id: driver._id, name: driver.name, mobile: driver.mobileNumber, info: driver.info });
+        setNewDriver( { driverID: driver.driverID, name: driver.name, mobile: driver.mobileNumber, info: driver.info });
         setUpdateForm(true);
         setShowForm(true);
     };
@@ -84,7 +84,7 @@ const DriverData = () => {
     };
 
     const handleSaveClick = async () => {
-        if (!newDriver.name || !newDriver.mobile) {
+        if (!newDriver.driverID || !newDriver.name || !newDriver.mobile) {
             alert('Name and Mobile cannot be empty');
             return;
         }
@@ -104,7 +104,7 @@ const DriverData = () => {
             }
             console.error('Error adding driver', error);
         }
-        setNewDriver({_id: '', name: '', mobile: '', info: '' });
+        setNewDriver({driverID: '', name: '', mobile: '', info: '' });
         setShowForm(false);
         setUpdateForm(false);
     };
@@ -112,7 +112,7 @@ const DriverData = () => {
     const handleCancelClick = () => {
         setShowForm(false);
         setUpdateForm(false);
-        setNewDriver({_id: '', name: '', mobile: '', info: '' });
+        setNewDriver({driverID: '', name: '', mobile: '', info: '' });
     };
 
     return (
@@ -125,11 +125,13 @@ const DriverData = () => {
                             <span className="driverName">{driver.name}</span>
                             {selectedDriver && selectedDriver.name === driver.name && (
                                 <div className="driverDetails">
+                                    <p><strong>Driver ID:</strong> {driver.driverID}</p>
                                     <p><strong>Mobile:</strong> {driver.mobileNumber}</p>
                                     <p><strong>Extra info:</strong> {driver.info}</p>
+                                    <p><strong>Password:</strong>{driver.password}</p>
                                     <p>
                                         <button onClick={() => handleUpdateClick(driver)}>Edit</button>
-                                        <button onClick={() => handleDeleteClick(driver._id)}>Delete</button>
+                                        <button onClick={() => handleDeleteClick(driver.driverID)}>Delete</button>
                                     </p>
                                 </div>
                             )}
@@ -141,6 +143,7 @@ const DriverData = () => {
                 </div>
                 {showForm && (
                     <div className="driverForm">
+                        <input name="driverID" value={newDriver.driverID} onChange={handleInputChange} placeholder="Driver ID" />
                         <input name="name" value={newDriver.name} onChange={handleInputChange} placeholder="Driver Name" />
                         <input name="mobile" value={newDriver.mobile} onChange={handleInputChange} placeholder="Mobile Number" />
                         <input name="info" value={newDriver.info} onChange={handleInputChange} placeholder="Extra info" />

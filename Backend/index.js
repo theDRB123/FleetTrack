@@ -39,20 +39,25 @@ const connectMongo = async () => {
 }
 
 connectMongo();
-app.use(cors());
-app.options('*', cors());
-var allowCrossDomain = function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
-    next();
-}
-app.use(allowCrossDomain);
-/* app.use(cors({
+// /* app.use(cors());
+// app.options('*', cors());
+// var allowCrossDomain = function (req, res, next) {
+//     res.header('Access-Control-Allow-Credentials', true);
+//     res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+//     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+//     res.header('Access-Control-Allow-Headers', 'Content-Type');
+//     next();
+// } */
+// // app.use(allowCrossDomain);
+app.use(cors({
     origin: "http://localhost:3000",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
-})); */
+}));
+// app.use(cors())
+// app.options('*', cors())
+
+
 app.use(express.json());
 
 const globalUserID = "test";
@@ -77,34 +82,34 @@ passport.use(
         callbackURL: "http://localhost:4000/auth/google/callback",
         scope: ["profile", "email"]
     },
-    async(accessToken, refreshToken, profile, done) => {
-        console.log(profile);
-        try{
-            let user = await userdb.findOne({googleId: profile.id});
+        async (accessToken, refreshToken, profile, done) => {
+            console.log(profile);
+            try {
+                let user = await userdb.findOne({ googleId: profile.id });
 
-            if(user){
-                return done(null, user);
-            } else {
-                const newUser = new userdb({
-                    googleId: profile.id,
-                    displayName: profile.displayName,
-                    email: profile.emails[0].value,
-                    image: profile.photos[0].value
-                });
+                if (user) {
+                    return done(null, user);
+                } else {
+                    const newUser = new userdb({
+                        googleId: profile.id,
+                        displayName: profile.displayName,
+                        email: profile.emails[0].value,
+                        image: profile.photos[0].value
+                    });
 
-                await newUser.save();
-                return done(null, newUser);
+                    await newUser.save();
+                    return done(null, newUser);
+                }
+            } catch (error) {
+                return done(error, null);
             }
-        } catch (error) {
-            return done(error, null);
-        }
-    })
+        })
 );
 
-function checkAuthentication(req,res,next){
-    if(req.isAuthenticated()){
+function checkAuthentication(req, res, next) {
+    if (req.isAuthenticated()) {
         next();
-    } else{
+    } else {
         console.log("User not authenticated");
         res.status(401).send("User not authenticated");
     }
@@ -130,7 +135,7 @@ app.get("/auth/google/callback", passport.authenticate("google", {
 }));
 
 app.get("/login/sucess", (req, res) => {
-    if(req.user){
+    if (req.user) {
         res.status(200).json({
             success: true,
             message: "user has successfully authenticated",
@@ -146,8 +151,8 @@ app.get("/login/sucess", (req, res) => {
 });
 
 app.get("/logout", (req, res) => {
-    req.logOut(function(err){
-        if(err){
+    req.logOut(function (err) {
+        if (err) {
             return Next(err)
         }
         res.redirect("http://localhost:3000");
@@ -182,7 +187,7 @@ app.post('/deleteRoute', checkAuthentication, async (req, res) => {
     const data = req.body;
 
     try {
-        await Route.deleteOne({ userID: req.user.googleId, _id: data.routeId});
+        await Route.deleteOne({ userID: req.user.googleId, _id: data.routeId });
         console.log("deletedRouteData")
         res.send(data)
     } catch (err) {
@@ -193,13 +198,24 @@ app.post('/deleteRoute', checkAuthentication, async (req, res) => {
 
 //add driver data
 app.post('/addDriver', checkAuthentication, async (req, res) => {
+    console.log("Adding Driver Data");
+
     const data = req.body;
+
+    var password = generator.generateMultiple(3, {
+        length: 6,
+        uppercase: true,
+        numbers: true,
+        lowercase: true
+    })
 
     const driver = new Driver({
         userID: req.user.googleId,
+        driverID: data.driverID,
         name: data.name,
         mobileNumber: data.mobile,
-        info: data.info
+        info: data.info,
+        password: password[0]
     })
 
     try {
@@ -219,7 +235,7 @@ app.post('/updateDriver', checkAuthentication, async (req, res) => {
         const driver = await Driver.findOneAndUpdate(
             {
                 userID: req.user.googleId,
-                _id: data._id
+                driverID: data.driverID
             },
             {
                 name: data.name,
@@ -244,7 +260,7 @@ app.post('/deleteDriver', checkAuthentication, async (req, res) => {
     const data = req.body;
 
     try {
-        await Driver.deleteOne({ userID: req.user.googleId, _id: data.driverId});
+        await Driver.deleteOne({ userID: req.user.googleId, driverID: data.driverID});
         console.log("Deleted Driver Data")
         res.send(data)
     } catch (err) {
@@ -252,6 +268,21 @@ app.post('/deleteDriver', checkAuthentication, async (req, res) => {
         res.status(500).send('Server error')
     }
 })
+
+app.get('/checkDriver', async (req, res) => {
+    const data = req.body;
+
+    try {
+        const driver = await Driver.findOne({ driverID: data.driverID, password: data.password });
+        if (!driver) return res.send(false);
+        driver.password = null;
+        console.log('Driver found!');
+        res.send(true);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server error');
+    }
+});
 
 //add vehicle data
 app.post('/addVehicle', checkAuthentication, async (req, res) => {
@@ -318,7 +349,7 @@ app.post('/deleteVehicle', checkAuthentication, async (req, res) => {
     const data = req.body;
 
     try {
-        await Vehicle.deleteOne({ userID: req.user.googleId, _id: data.vehicleId});
+        await Vehicle.deleteOne({ userID: req.user.googleId, _id: data.vehicleId });
         console.log("Deleted Vehicle Data")
         res.send(data)
     } catch (err) {
@@ -331,7 +362,7 @@ app.post('/deleteVehicle', checkAuthentication, async (req, res) => {
 app.get('/driverData', checkAuthentication, async (req, res) => {
     console.log("Drivers requested");
     try {
-        const drivers = await Driver.find({ userID: req.user.googleId }).select('name mobileNumber _id info')
+        const drivers = await Driver.find({ userID: req.user.googleId }).select('driverID name mobileNumber _id info password')
         res.send(drivers);
         res.end()
     } catch (err) {
@@ -363,7 +394,7 @@ app.post('/updateVehicleLocation', async (req, res) => {
             {
                 userID: data.userID,
                 vehicleID: data.vehicleID,
-                password : data.password
+                password: data.password
             },
             {
                 last_location: data.location,
@@ -399,7 +430,7 @@ app.get('/routedata/:routeId', checkAuthentication, async (req, res) => {
     console.log("Route data requested");
 
     try {
-        const route = await Route.findOne({ userID: req.user.googleId, _id: req.params.routeId});
+        const route = await Route.findOne({ userID: req.user.googleId, _id: req.params.routeId });
         if (!route) return res.status(404).send('Route not found');
         res.send(route);
     } catch (err) {
@@ -456,7 +487,18 @@ app.post('/addTripData', checkAuthentication, async (req, res) => {
     }
 });
 
-
+app.post('/getDriverTrips', async (req, res) => {
+    console.log("Getting Driver Trips");
+    const data = req.body;
+    const driver = await Driver.findOne({ userID: data.userID, _id: data.driverId });
+    try {
+        const trips = await Trip.find({ userID: data.userID, driverId: data.driverId });
+        res.send(trips);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server error');
+    }
+});
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
