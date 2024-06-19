@@ -494,10 +494,15 @@ app.post('/addTripData', checkAuthentication, async (req, res) => {
     }
 });
 
-app.post('/getDriverTrips', async (req, res) => {
+app.get('/getDriverTrips', async (req, res) => {
     console.log("Getting Driver Trips");
-    const data = req.body;
-    const driver = await Driver.findOne({ driverID: data.driverID, password: data.password });
+    const { driverID, password } = req.query;
+
+    if (!driverID || !password) {
+        return res.send({ isValid: false });
+    }
+
+    const driver = await Driver.findOne({ driverID: driverID, password: password });
 
     const userID = driver.userID;
 
@@ -509,7 +514,7 @@ app.post('/getDriverTrips', async (req, res) => {
             try {
                 console.log(trips[i])
                 console.log(trips[i].routeName)
-                const route = await Route.findOne({name: trips[i].routeName });
+                const route = await Route.findOne({userID: userID, name: trips[i].routeName });
 
                 if (route) {
                     const updatedTrip = {
