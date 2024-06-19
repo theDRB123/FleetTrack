@@ -275,10 +275,14 @@ app.post('/deleteDriver', checkAuthentication, async (req, res) => {
 })
 
 app.get('/checkDriver', async (req, res) => {
-    const data = req.body;
+    const { driverID, password } = req.query;
+
+    if (!driverID || !password) {
+        return res.send({ isValid: false });
+    }
 
     try {
-        const driver = await Driver.findOne({ driverID: data.driverID, password: data.password });
+        const driver = await Driver.findOne({ driverID, password });
         const isValid = driver ? true : false;
         res.send({ isValid });
     } catch (err) {
