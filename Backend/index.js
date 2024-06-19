@@ -498,17 +498,41 @@ app.post('/getDriverTrips', async (req, res) => {
     console.log("Getting Driver Trips");
     const data = req.body;
     const driver = await Driver.findOne({ driverID: data.driverID, password: data.password });
-    
+
     const userID = driver.userID;
 
     try {
-        const trips = await Trip.find({ userID: userID, driverId: data.driverId });
-        res.send(trips);
+        const trips = await Trip.find({ userID: userID, driverId: driver._id });
+        const updatedTrips = [];
+        console.log(trips);
+        for (let i = 0; i < trips.length; i++) {
+            try {
+                console.log(trips[i])
+                console.log(trips[i].routeName)
+                const route = await Route.findOne({name: trips[i].routeName });
+
+                if (route) {
+                    const updatedTrip = {
+                        ...trips[i]._doc,
+                        estimatedTime: route.estimatedTime,
+                        distance: route.distance,
+                    };
+                    updatedTrips.push(updatedTrip);
+                } else {
+                    console.error(`Route not found for trip ${trips[i]._id}`);
+                }
+            } catch (routeErr) {
+                console.error(`Error fetching route for trip ${trips[i]._id}: ${routeErr.message}`);
+            }
+        }
+
+        res.send(updatedTrips);
     } catch (err) {
         console.error(err);
         res.status(500).send('Server error');
     }
 });
+
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
