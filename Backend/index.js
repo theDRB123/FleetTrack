@@ -279,10 +279,8 @@ app.get('/checkDriver', async (req, res) => {
 
     try {
         const driver = await Driver.findOne({ driverID: data.driverID, password: data.password });
-        if (!driver) return res.send("false");
-        driver.password = null;
-        console.log('Driver found!');
-        res.send("true");
+        const isValid = driver ? true : false;
+        res.send({ isValid });
     } catch (err) {
         console.error(err);
         res.status(500).send('Server error');
