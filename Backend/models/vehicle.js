@@ -7,7 +7,7 @@ const vehicleSchema = new mongoose.Schema({
     info: String,
     password: String,
     last_location: [Number],
-    last_location_date_time: String,
+    last_location_date_time: Number,
 })
 
 module.exports = mongoose.model('Vehicle', vehicleSchema);
