@@ -8,7 +8,7 @@ const monitorVehicles = async (threshold) => {
     // under the specif1ed user
     const currentTime = new Date().getTime();
 
-    const trips = await Trip.find({}).select('vehicleId userID'); 
+    const trips = await Trip.find({ tripStatus: { $ne: 'COMPLETED' } }).select('vehicleId userID'); 
     trips.forEach(async (trip) => {
         const vehicle = await Vehicle.findOne({ _id: trip.vehicleId });
 
