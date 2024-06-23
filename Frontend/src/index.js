@@ -12,7 +12,7 @@ import ErrorBoundary from './ErrorBoundary';
 import VehicleData from './VehicleData';
 import DriverData from './DriverData';
 import Home from './Home';
-import LoginPage from './Login';
+import LoginPage from './components/Login';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
