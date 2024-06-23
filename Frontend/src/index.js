@@ -12,6 +12,7 @@ import ErrorBoundary from './ErrorBoundary';
 import VehicleData from './VehicleData';
 import DriverData from './DriverData';
 import Home from './Home';
+import LoginPage from './Login';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -36,6 +37,7 @@ root.render(
         <Route path="/VehicleData" element={<VehicleData />} />
         <Route path="/DriverData" element={<DriverData />} />
         <Route path="/ViewDriverRoutes" element={<ViewDriverRoutes />} />
+        {/* <Route path="/login" element={<LoginPage />} /> */}
         <Route path="/" element={<Home />} />
       </Routes>
     </Router>
