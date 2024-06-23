@@ -49,11 +49,11 @@ router.get('/routenames', checkAuthentication, async (req, res) => {
     }
 });
 
-router.get('/routedata/:routeId', checkAuthentication, async (req, res) => {
+router.get('/routedata/:routeId', async (req, res) => {
     console.log("Route data requested");
 
     try {
-        const route = await Route.findOne({ userID: req.user.googleId, _id: req.params.routeId });
+        const route = await Route.findOne({  _id: req.params.routeId });
         if (!route) return res.status(404).send('Route not found');
         res.send(route);
     } catch (err) {

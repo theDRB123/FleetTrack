@@ -7,6 +7,7 @@ import Dashboard from './Dashboard';
 import AddRoute from './AddRoute';
 import ViewRoutes from './ViewRoutes';
 import ViewRoute from './ViewRoute';
+import ViewDriverRoutes from './ViewDriverRoutes';
 import ErrorBoundary from './ErrorBoundary';
 import VehicleData from './VehicleData';
 import DriverData from './DriverData';
@@ -34,6 +35,7 @@ root.render(
         <Route path="/ViewRoute/:routeName" element={<ViewRoute />} />
         <Route path="/VehicleData" element={<VehicleData />} />
         <Route path="/DriverData" element={<DriverData />} />
+        <Route path="/ViewDriverRoutes" element={<ViewDriverRoutes />} />
         <Route path="/" element={<Home />} />
       </Routes>
     </Router>
