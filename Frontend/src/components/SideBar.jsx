@@ -29,7 +29,9 @@ const Sidebar = () => {
                     <img src={services} alt="FleetTrack" />
                     <p>Services</p>
                 </NavLink>
-                
+                <div className="login">
+        <LoginBtn />
+      </div>
             </div>
         </div>
     )
