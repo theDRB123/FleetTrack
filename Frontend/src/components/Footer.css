@@ -19,8 +19,9 @@
 }
 
 .footer-content-left img{
-    width: 300px;
-    height: 100px;
+    height: 50px;
+    width: max-content;
+    margin-top: 30px;
 }
 
 .footer-copyright{

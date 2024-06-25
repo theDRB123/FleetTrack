@@ -1,13 +1,13 @@
 import React from 'react'
 import './Footer.css'
-import headerImg from '../assets/headerimg.jpg'
+import footImg from '../assets/FleetTrack.png'
 
 const Footer = () => {
     return (
         <div className='footer' id='footer'>
             <div className="footer-content">
                 <div className="footer-content-left">
-                <img src={headerImg} alt="icon" />
+                <img src={footImg} alt="icon" />
                     <p>
                         FleetTrack is a fleet management system that allows you to track your vehicles in real-time.
                         It is a user-friendly system that provides you with all the information you need to manage your fleet effectively.

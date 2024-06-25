@@ -5,6 +5,7 @@ import './Navbar.css';
 
 const useUserData = () => {
   const [userdata, setUserdata] = useState({});
+  console.log("response",userdata);
 
   useEffect(() => {
     const getUser = async () => {
@@ -26,7 +27,9 @@ const Navbar = () => {
   const userdata = useUserData();
   const navigate = useNavigate();
 
-  const loginWithGoogle = () => navigate('/auth/google/callback');
+  const loginwithgoogle = ()=>{
+    window.open("http://localhost:4000/auth/google/callback","_self")
+}
   const logout = () => navigate('/logout');
 
   return (
@@ -48,7 +51,7 @@ const Navbar = () => {
               <img src={userdata.image} className="nav-user-image" alt="User" />
             </>
           ) : (
-            <button onClick={loginWithGoogle} className="nav-button">Login</button>
+            <button onClick={loginwithgoogle} className="nav-button">Login</button>
           )}
         </div>
       </nav>
