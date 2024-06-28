@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Navbar.css';
+import Hamburger from './components/Hamburger';
 
 const useUserData = () => {
   const [userdata, setUserdata] = useState({});
@@ -27,7 +28,7 @@ const Navbar = () => {
   const userdata = useUserData();
   const navigate = useNavigate();
 
-  const loginwithgoogle = ()=>{
+  const loginwithgoogle = () => {
     window.open("http://localhost:4000/auth/google/callback","_self")
 }
   const logout = () => navigate('/logout');
@@ -35,6 +36,7 @@ const Navbar = () => {
   return (
     <header className="navbar">
       <nav className="navbar-container">
+      <Hamburger />
         <div className="navbar-brand">
           <h1>FleetTrack</h1>
         </div>
