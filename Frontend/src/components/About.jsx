@@ -5,7 +5,7 @@ import fleetTrackLogo from '../assets/aboutimg.avif';
 
 const About = () => {
     return (
-        <div className="about">
+        <div className="about" id="about">
         <img src={fleetTrackLogo} alt="FleetTrack Logo" className="about-logo" />
         {/* <h2>About FleetTrack</h2> */}
         <p><b>Welcome to FleetTrack, your all-in-one fleet management solution!</b></p>

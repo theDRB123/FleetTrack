@@ -3,6 +3,7 @@ import Navbar from './Navbar'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import About from './components/About'
+import ContactUs from './components/Contact'
 
 
 const Home = () => {
@@ -14,6 +15,7 @@ const Home = () => {
       <Navbar />
       <Header />
       <About />
+      <ContactUs />
       <Footer />
     </>
   )

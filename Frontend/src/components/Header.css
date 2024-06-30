@@ -40,10 +40,24 @@
     background-clip: text;
 }
 
-.sidecontent {
+.sidecontentryt {
     position: absolute;
     right: 0;
-    width: 30%;
+    width: 38%;
+}
+
+.sidecontentryt p{
+    font-size: 1.2vw;
+    font-weight: 500;
+    color: #000;
+    margin: 1vw 0;
+    text-align: justify;
+}
+
+.sidecontentryt h2{
+    color: #000;
+    margin: 1vw 0;
+    text-align: justify;
 }
 
 @media screen and (max-width: 600px) {
