@@ -1,0 +1,54 @@
+/* :root {
+    --font-size-default: 16px;
+    --color-text-primary: #333;
+    --color-link: #007bff;
+    --color-button-bg: rgb(72, 72, 160);
+    --color-button-bg-hover: #6d9dd1;
+    --space-margin: 20px;
+  }
+  
+  .login-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    width: 100%;
+  }
+  
+  .login-links {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  .nav-user,
+  .nav-link {
+    font-size: var(--font-size-default);
+    color: var(--color-text-primary);
+    margin-right: var(--space-margin);
+  }
+  
+  .nav-link {
+    text-decoration: none;
+    color: var(--color-link);
+  }
+  
+  .nav-button {
+    background-color: var(--color-button-bg);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: var(--font-size-default);
+  }
+  
+  .nav-button:hover,
+  .nav-button:focus {
+    background-color: var(--color-button-bg-hover);
+    outline: none;
+  } */

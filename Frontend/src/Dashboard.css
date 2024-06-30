@@ -5,7 +5,7 @@ body {
 
 .dashNavbar {
     text-align: center;
-    background-color: #f5f5f5;
+    background-color: #2c3e50;
     padding: 1px;
 }
 
@@ -22,7 +22,8 @@ body {
   }
   
   .menu-button {
-    color: #000000;
+    color: transparent;
+    background-color: transparent;
     border: none;
     padding: 10px 10px;
     cursor: pointer;
@@ -54,7 +55,7 @@ body {
   }
   
   .links-container a:hover {
-    background-color: #f0f0f0;
+    background-color: #2c3e50;
   }
   
   .slide-menu.open {
@@ -83,16 +84,16 @@ body {
   }
   
   .tripItem:hover {
-    background-color: #e0e0e0;
+    background-color: #2c3e50;
   }
   
   .tripItem.selected {
-    background-color: #f5f5f5;
+    background-color: #2c3e50;
   }
   
   .tripDetails {
     padding: 15px;
-    background-color: #dedddd;
+    background-color: #2c3e50;
     border-radius: 0 0 10px 10px;
   }
   

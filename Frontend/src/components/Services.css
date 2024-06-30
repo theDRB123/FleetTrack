@@ -1,0 +1,32 @@
+.services-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 50px;
+    background-color: #f5f5f5; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    margin: 20px; 
+}
+
+.services-content {
+    max-width: 600px; 
+}
+
+.services-content h1 {
+    font-size: 2.5rem; 
+    color: cyan; 
+    margin-bottom: 20px; 
+}
+
+.services-content p {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: #666;
+}
+
+img {
+    max-width: 50%;
+    height: auto; 
+    border-radius: 8px; 
+}

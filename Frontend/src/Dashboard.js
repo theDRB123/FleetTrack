@@ -6,7 +6,7 @@ import VehicleData from './VehicleData';
 import ViewRoute from './ViewRoute';
 import axios from 'axios';
 import './Dashboard.css';
-import Headers from './Header';
+import Headers from './Navbar';
 
 const Dashboard = () => {
   const [menuOpen, setMenuOpen] = useState(false);
