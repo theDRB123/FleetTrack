@@ -31,7 +31,9 @@ const Navbar = () => {
   const loginwithgoogle = () => {
     window.open("http://localhost:4000/auth/google/callback","_self")
 }
-  const logout = () => navigate('/logout');
+const logout = ()=>{
+  window.open("http://localhost:4000/logout","_self")
+}
 
   return (
     <header className="navbar">
