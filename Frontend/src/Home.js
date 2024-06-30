@@ -4,6 +4,7 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 import About from './components/About'
 import ContactUs from './components/Contact'
+import Services from './components/Services'
 
 
 const Home = () => {
@@ -15,6 +16,7 @@ const Home = () => {
       <Navbar />
       <Header />
       <About />
+      <Services />
       <ContactUs />
       <Footer />
     </>

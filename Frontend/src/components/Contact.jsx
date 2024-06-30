@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import emailjs from 'emailjs-com';
 import './Contact.css';
+import contactimg from '../assets/contactus.png';
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -40,23 +41,29 @@ const ContactUs = () => {
   };
 
   return (
-    <div className="contact-us-container">
-      <h1>Contact Us</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="name">Name</label>
-          <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required />
+    <div className="contact-us-container" style={{ display: 'flex', alignItems: 'center' }}>
+      <div className="contact-us-content">
+        <h1>Contatct - Us</h1>
         </div>
-        <div className="form-group">
-          <label htmlFor="email">Email</label>
-          <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} required />
-        </div>
-        <div className="form-group">
-          <label htmlFor="message">Message</label>
-          <textarea id="message" name="message" value={formData.message} onChange={handleChange} required />
-        </div>
-        <button type="submit" className="submit-button">Submit</button>
-      </form>
+      <img src = {contactimg} alt="contact"/>
+      <div>
+        <h1>Contact Us</h1>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="name">Name</label>
+            <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required />
+          </div>
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} required />
+          </div>
+          <div className="form-group">
+            <label htmlFor="message">Message</label>
+            <textarea id="message" name="message" value={formData.message} onChange={handleChange} required />
+          </div>
+          <button type="submit" className="submit-button">Submit</button>
+        </form>
+      </div>
     </div>
   );
 };
