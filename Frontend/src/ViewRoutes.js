@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import ViewRoute from "./ViewRoute";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Headers from "./Navbar";
 
 const ViewRoutes = () => {
   const navigate = useNavigate();
@@ -41,6 +42,8 @@ const ViewRoutes = () => {
   };
 
   return (
+    <>
+    <Headers />
     <div className="viewRoutes">
       <div className="routesContainer">
         <h2>Routes</h2>
@@ -66,6 +69,7 @@ const ViewRoutes = () => {
         { selectedRoute && <ViewRoute routeId={selectedRoute._id} />}
       </div>
     </div>
+    </>
   );
 };
 

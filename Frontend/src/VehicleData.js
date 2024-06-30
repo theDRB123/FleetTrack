@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './VehicleData.css';
 import axios from 'axios';
 import randomColor from 'randomcolor';
+import Headers from './Navbar';
 
 const VehicleData = () => {
     const [map, setMap] = useState(null);
@@ -174,6 +175,7 @@ const VehicleData = () => {
 
 
   return (
+    <> <Headers />
     <div className= "vehicleData">
         <div className="vehicleDataContainer">
             <h2>Vehicle Data</h2>
@@ -215,6 +217,7 @@ const VehicleData = () => {
             <div id="myMapView"/>
         </div>
     </div>
+    </>
   );
 };
 

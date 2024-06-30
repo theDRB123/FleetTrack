@@ -73,6 +73,10 @@ body {
     height: 90vh;
     width: 30vw;
   }
+
+  .tripList h2{
+    color: #2c3e50;
+  }
   
   .tripItem {
     padding: 15px;
