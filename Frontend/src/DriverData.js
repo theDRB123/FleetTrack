@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './DriverData.css';
 import axios from 'axios';
+import Headers from './Navbar';
 
 const DriverData = () => {
     const [driverData, setDriverData] = useState(null);
@@ -116,6 +117,8 @@ const DriverData = () => {
     };
 
     return (
+        <div>
+            <Headers />
         <div className="driverData">
             <div className="driverDataContainer">
                 <h2>Driver Data</h2>
@@ -152,6 +155,7 @@ const DriverData = () => {
                     </div>
                 )}
             </div>
+        </div>
         </div>
     );
 };
