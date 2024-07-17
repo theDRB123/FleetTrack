@@ -2,6 +2,7 @@ html, body{
     padding:0;
     margin:0;
     height:100%;
+    color: black;
 }
 
 *{
@@ -29,6 +30,17 @@ html, body{
     width:380px;
     height:100%;
     overflow-y:auto;
+    color: black;
+}
+
+#directionsPanel
+
+{
+    color: #363636;
+}
+
+#directionsItinerary{
+    color: black;
 }
 
 .map{
