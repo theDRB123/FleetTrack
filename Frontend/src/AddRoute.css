@@ -4,8 +4,14 @@ html, body{
     height:100%;
 }
 
+*{
+    color: black;
+}
+
+
 .container{
     position: relative;
+    color: black;
     
     display: flex;
 
@@ -39,11 +45,16 @@ html, body{
     height:100%;
     width: 100%;
     float:left;
+    color: black;
 }
 
 h1 {
     color: aqua;
     background-color: #363636;
+}
+
+button{
+    color: black;
 }
 
 #saveButton {
