@@ -41,6 +41,7 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
+
 const Hamburger = () => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleMenu = () => {
@@ -65,10 +66,10 @@ const Hamburger = () => {
               <FontAwesomeIcon icon={'<--'} /> {'close'}
             </button>
             <ul>
-              <li><Link to="/AddRoute" className="nav-link">Add route</Link></li>
-              <li><Link to="/ViewRoutes" className="nav-link">Routes</Link></li>
-              <li><Link to="/VehicleData" className="nav-link">Vehicles</Link></li>
-              <li><Link to="/DriverData" className="nav-link">Drivers</Link></li>
+              <li><Link to="/" className="nav-link">Home</Link></li>
+              <li><Link to="/services" className="nav-link">Resources</Link></li>
+              <li><Link to="/contact" className="nav-link">Costumer-Support</Link></li>
+              <li><Link to="/contact" className="nav-link">Complain</Link></li>
             </ul>
           </div>
         </div>
