@@ -51,9 +51,9 @@ router.post('/addTripData', checkAuthentication, async (req, res) => {
     }
 });
 
-router.post('/getDriverTrips', async (req, res) => {
+router.get('/getDriverTrips', async (req, res) => {
     console.log("Getting Driver Trips");
-    const data = req.body;
+    const data = req.query;
     const driver = await Driver.findOne({ driverID: data.driverID, password: data.password });
     const userID = driver.userID;
 
