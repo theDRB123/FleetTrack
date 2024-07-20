@@ -67,14 +67,14 @@ router.post('/deleteDriver', checkAuthentication, async (req, res) => {
 });
 
 router.get('/checkDriver', async (req, res) => {
-    const data = req.body;
+    const data = req.query;
 
     try {
         const driver = await Driver.findOne({ driverID: data.driverID, password: data.password });
-        if (!driver) return res.send(false);
+        if (!driver) return res.send({ isValid: false });
         driver.password = null;
         console.log('Driver found!');
-        res.send(true);
+        res.send({ isValid: true });
     } catch (err) {
         console.error(err);
         res.status(500).send('Server error');
