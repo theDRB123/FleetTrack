@@ -9,8 +9,6 @@ const loadScript = () => {
 }
 
 
-
-
 const AddRoute = () => {
 
   useEffect(() => {
@@ -118,6 +116,7 @@ const AddRoute = () => {
     };
 
     return new Promise((resolve, reject) => {
+      <style color='black'></style>
       requestOptions.callback = function (answer, userData) {
         let city = answer.address.locality;
         let state = answer.address.adminDistrict;
