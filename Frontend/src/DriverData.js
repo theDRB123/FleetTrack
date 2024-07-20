@@ -47,7 +47,7 @@ const DriverData = () => {
     const deleteDriver = async (driverId) => {
         try {
             await axios.post('http://localhost:4000/deleteDriver',
-            { driverId },
+            { driverID: driverId },
             { withCredentials: true });
 
             await fetchDriverData();
