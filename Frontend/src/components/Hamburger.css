@@ -34,47 +34,66 @@
     background-color: brown;
   }
   
-  .menu-list {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background-color: #8b8787;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-    border-radius: 8px;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    transform: scale(1);
-    z-index: 10;
+  .slide-menu {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100%;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: left 0.3s ease-in-out;
+    z-index: 1000;
+    text-align: left;
   }
-  
-  .menu-list ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .menu-list ul li a {
-    display: block;
+
+  .menu-button-open {
+    background-color: transparent;
+    color: #000000;
+    border: none;
     padding: 10px 20px;
+    cursor: pointer;
+    font-size: 25px;
+  }
+  
+  .links-container {
+    padding: 20px;
+  }
+  
+  .links-container a {
+    color: #333;
     text-decoration: none;
-    color: black;
-    transition: background-color 0.3s ease;
+    display: block;
+    padding: 8px;
+    transition: background-color 0.3s;
   }
   
-  .menu-list ul li a:hover {
-    background-color: #f4f4f4;
+  .links-container a:hover {
+    background-color: #2c3e50;
   }
   
-  .hamburger-menu.open .line1 {
+  .slide-menu.open {
+    left: 0;
+    text-align: left;
+  }
+  
+  .line1 {
     transform: translateY(11px) rotate(45deg);
   }
   
-  .hamburger-menu.open .line2 {
+  .line2 {
     opacity: 0;
   }
   
-  .hamburger-menu.open .line3 {
+  .line3 {
     transform: translateY(-11px) rotate(-45deg);
   }
 
-  
+  .menu-back-button {
+    background-color: transparent;
+    color: #000000;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 25px;
+  }

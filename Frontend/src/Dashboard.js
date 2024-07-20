@@ -82,16 +82,6 @@ const Dashboard = () => {
         <Headers />
       </div>
       
-      <div className={`slide-menu ${menuOpen ? 'open' : ''}`}>
-      <button className="menu-button-open" onClick={toggleMenu}>🡠</button>
-      <div className="links-container">
-        <Link to="/AddRoute" className="nav-link">Add route</Link>
-        <Link to="/ViewRoutes" className="nav-link">Routes</Link>
-        <Link to="/VehicleData" className="nav-link">Vehicles</Link>
-        <Link to="/DriverData" className="nav-link">Drivers</Link>
-      </div>
-    </div>
-    <button className="menu-button" onClick={toggleMenu}>☰</button>
     <div className="listMapContainer">
     <div className="tripList">
     <h2>Trips:</h2>
