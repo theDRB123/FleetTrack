@@ -3,14 +3,16 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './LoginBtn.css';
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 const useUserData = () => {
   const [userdata, setUserdata] = useState({});
-  console.log("response",userdata);
+  console.log("response", userdata);
 
   useEffect(() => {
     const getUser = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/login/success', { withCredentials: true });
+        const response = await axios.get(`${apiUrl}/login/success`, { withCredentials: true });
         setUserdata(response.data.user);
       } catch (error) {
         console.error('Error fetching user data:', error);
@@ -27,9 +29,9 @@ const LoginBtn = () => {
   const userdata = useUserData();
   const navigate = useNavigate();
 
-  const loginwithgoogle = ()=>{
-    window.open("http://localhost:4000/auth/google/callback","_self")
-}
+  const loginwithgoogle = () => {
+    window.open(`${apiUrl}/auth/google/callback`, "_self")
+  }
   const logout = () => navigate('/logout');
 
   return (

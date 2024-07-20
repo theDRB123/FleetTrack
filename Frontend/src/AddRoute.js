@@ -1,6 +1,6 @@
 import './AddRoute.css';
 import React, { useEffect, useState } from 'react';
-
+const apiUrl = process.env.REACT_APP_API_URL;
 
 const loadScript = () => {
   let script = document.createElement("script");
@@ -13,7 +13,7 @@ const AddRoute = () => {
 
   useEffect(() => {
     loadScript()
-  } , []);
+  }, []);
 
   const [map, setMap] = useState(null);
   let directionsManager;
@@ -89,7 +89,7 @@ const AddRoute = () => {
 
       console.log(routePointsArray)
 
-      const response = await fetch('http://localhost:4000/addRoute', {
+      const response = await fetch(`${apiUrl}/addRoute`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

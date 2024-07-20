@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import './ViewRoutes.css';
 import axios from 'axios';
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 //this component will receive the route name from other component, it will fetch the route data from the server and display it on the map, also receive vehicle location
 const ViewRoutes = ({ routeId, vehicleCoordinate, liveLocation }) => {
   const [map, setMap] = useState(null);
@@ -11,12 +13,13 @@ const ViewRoutes = ({ routeId, vehicleCoordinate, liveLocation }) => {
   const [routeData, setRouteData] = useState(null);
   const [devicePushpin, setDevicePushpin] = useState(null);
 
+
   console.log("Route id: ", routeId);
   // Function to fetch route data from the API
   const fetchRouteData = async (routeId) => {
     console.log("Route data requested")
     try {
-      const response = await axios.get(`http://localhost:4000/routedata/${routeId}`);
+      const response = await axios.get(`${apiUrl}/routedata/${routeId}`);
       return response.data;
     } catch (error) {
       console.error('Error fetching route data:', error);
@@ -35,7 +38,7 @@ const ViewRoutes = ({ routeId, vehicleCoordinate, liveLocation }) => {
       setRouteSelected(true);
     }
   }, [routeId]);
-    
+
 
   window.loadMapModule = async () => {
     GetMap();
@@ -49,9 +52,9 @@ const ViewRoutes = ({ routeId, vehicleCoordinate, liveLocation }) => {
 
   const GetMap = () => {
     if (locationData && locationData.length === 0) {
-        console.warn('Route data is empty');
-        //alert('Error: Route data is empty');
-        return;
+      console.warn('Route data is empty');
+      //alert('Error: Route data is empty');
+      return;
     }
     const locations = locationData.map(location => new window.Microsoft.Maps.Location(location[0], location[1]));
     let mapOptions = {};
@@ -81,7 +84,7 @@ const ViewRoutes = ({ routeId, vehicleCoordinate, liveLocation }) => {
       text: 'E',
     };
 
-    if(vehicleCoordinate) {
+    if (vehicleCoordinate) {
       const vehicleLocation = new window.Microsoft.Maps.Location(vehicleCoordinate[0], vehicleCoordinate[1]);
       const vehiclePushpin = new window.Microsoft.Maps.Pushpin(vehicleLocation, null);
       _map.entities.push(vehiclePushpin);
@@ -113,23 +116,23 @@ const ViewRoutes = ({ routeId, vehicleCoordinate, liveLocation }) => {
     animatePushpin(); */
     //repeat every 10 seconds
     setInterval(() => {
-      if(liveLocation && map) {
+      if (liveLocation && map) {
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(
             (position) => {
               const { latitude, longitude } = position.coords;
               console.log('Device coordinates:', latitude, longitude);
-              
-                const index = _map.entities.indexOf(pushpin);
-                if (index !== -1) {
-                  _map.entities.removeAt(index);
-                }
-                pushpin = new window.Microsoft.Maps.Pushpin(position.coords, {
-                  color: 'grey',
-                  text: 'L',
-                });
-                _map.entities.push(pushpin);
-                _map.center = position.coords;
+
+              const index = _map.entities.indexOf(pushpin);
+              if (index !== -1) {
+                _map.entities.removeAt(index);
+              }
+              pushpin = new window.Microsoft.Maps.Pushpin(position.coords, {
+                color: 'grey',
+                text: 'L',
+              });
+              _map.entities.push(pushpin);
+              _map.center = position.coords;
             },
             (error) => console.error('Error getting device coordinates:', error)
           );
@@ -144,7 +147,7 @@ const ViewRoutes = ({ routeId, vehicleCoordinate, liveLocation }) => {
   const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
   return (
-    <div id="myMapView"/>
+    <div id="myMapView" />
   );
 };
 

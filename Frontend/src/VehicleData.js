@@ -13,12 +13,14 @@ const VehicleData = () => {
     const [updateForm, setUpdateForm] = useState(false);
 
     const [showForm, setShowForm] = useState(false);
-    const [newVehicle, setNewVehicle] = useState({ vehicleID: '', max_load: '', last_location: [], last_location_date_time: '', info: ''});
+    const [newVehicle, setNewVehicle] = useState({ vehicleID: '', max_load: '', last_location: [], last_location_date_time: '', info: '' });
+
+    const apiUrl = process.env.REACT_APP_API_URL;
 
     useEffect(() => {
         const form = document.querySelector('.vehicleForm');
         if (form) {
-          form.style.transform = showForm ? 'translateY(0)' : 'translateY(100%)';
+            form.style.transform = showForm ? 'translateY(0)' : 'translateY(100%)';
         }
     }, [showForm]);
 
@@ -33,11 +35,11 @@ const VehicleData = () => {
           document.removeEventListener('click', handleClickOutside);
         };
       }, [showForm]); */
-      
-      const handleAddVehicleClick = (event) => {
+
+    const handleAddVehicleClick = (event) => {
         // event.stopPropagation(); // Prevent the click event from reaching the document
         setShowForm(true);
-      };
+    };
 
     const handleInputChange = (event) => {
         setNewVehicle({ ...newVehicle, [event.target.name]: event.target.value });
@@ -49,18 +51,15 @@ const VehicleData = () => {
             return;
         }
         try {
-            if(updateForm)
-            {
-                await axios.post('http://localhost:4000/updateVehicle', newVehicle, { withCredentials: true });
+            if (updateForm) {
+                await axios.post(`${apiUrl}/updateVehicle`, newVehicle, { withCredentials: true });
             }
-            else
-            {
-                await axios.post('http://localhost:4000/addVehicle', newVehicle, { withCredentials: true });
+            else {
+                await axios.post(`${apiUrl}/addVehicle`, newVehicle, { withCredentials: true });
             }
             await fetchVehicleData();
         } catch (error) {
-            if(error.response.status === 400)
-            {
+            if (error.response.status === 400) {
                 alert('Vehicle already exists');
             }
             console.error('Error adding vehicle', error);
@@ -69,10 +68,10 @@ const VehicleData = () => {
         setShowForm(false);
         setUpdateForm(false);
     };
-  
+
     const fetchVehicleData = async () => {
         try {
-            const response = await axios.get('http://localhost:4000/vehicledata', { withCredentials: true });
+            const response = await axios.get(`${apiUrl}/vehicledata`, { withCredentials: true });
             setVehicleData(response.data);
             return response.data;
         } catch (error) {
@@ -94,9 +93,9 @@ const VehicleData = () => {
     //delete vehicle
     const deleteVehicle = async (vehicleId) => {
         try {
-            await axios.post('http://localhost:4000/deleteVehicle',
-            { vehicleId },
-            { withCredentials: true });
+            await axios.post(`${apiUrl}/deleteVehicle`,
+                { vehicleId },
+                { withCredentials: true });
 
             await fetchVehicleData();
         } catch (error) {
@@ -105,7 +104,7 @@ const VehicleData = () => {
     };
 
     const handleUpdateClick = (vehicle) => {
-        setNewVehicle( { _id: vehicle._id, vehicleID: vehicle.vehicleID, max_load: vehicle.max_load, info: vehicle.info });
+        setNewVehicle({ _id: vehicle._id, vehicleID: vehicle.vehicleID, max_load: vehicle.max_load, info: vehicle.info });
         setUpdateForm(true);
         setShowForm(true);
     };
@@ -123,102 +122,100 @@ const VehicleData = () => {
         setNewVehicle({ _id: '', vehicleID: '', max_load: '', last_location: [], last_location_date_time: new Date.now(), info: '' });
     };
 
-  window.loadMapModule = async () => {
-    GetMap();
-  }
-
-  useEffect(() => {
-    if (vehicleData && vehicleData.length > 0) {
-      GetMap();
+    window.loadMapModule = async () => {
+        GetMap();
     }
-  }, [vehicleCoordinate, showAll]);
 
-  const GetMap = () => {
-    if (vehicleData && vehicleData.length === 0) {
-        console.warn('No vehicles');
-        alert('Error: No vehicles');
-        return;
-    }
-    let _map = new window.Microsoft.Maps.Map(document.getElementById('myMapView'), {
-        if(vehicleCoordinate) {
-            center: new window.Microsoft.Maps.Location(vehicleCoordinate[0], vehicleCoordinate[1])
+    useEffect(() => {
+        if (vehicleData && vehicleData.length > 0) {
+            GetMap();
         }
-    });
-    setMap(_map)
+    }, [vehicleCoordinate, showAll]);
 
-    if(showAll && vehicleData)
-    {
-        vehicleData.forEach((vehicle, index) => {
-            if(vehicle.last_location.length > 0)
-            {
-                const vehicleLocation = new window.Microsoft.Maps.Location(vehicle.last_location[0], vehicle.last_location[1]);
-                const vehiclePushpin = new window.Microsoft.Maps.Pushpin(vehicleLocation, { title: vehicle.vehicleID, color: randomColor()});
-                _map.entities.push(vehiclePushpin);
+    const GetMap = () => {
+        if (vehicleData && vehicleData.length === 0) {
+            console.warn('No vehicles');
+            alert('Error: No vehicles');
+            return;
+        }
+        let _map = new window.Microsoft.Maps.Map(document.getElementById('myMapView'), {
+            if(vehicleCoordinate) {
+                center: new window.Microsoft.Maps.Location(vehicleCoordinate[0], vehicleCoordinate[1])
             }
         });
+        setMap(_map)
+
+        if (showAll && vehicleData) {
+            vehicleData.forEach((vehicle, index) => {
+                if (vehicle.last_location.length > 0) {
+                    const vehicleLocation = new window.Microsoft.Maps.Location(vehicle.last_location[0], vehicle.last_location[1]);
+                    const vehiclePushpin = new window.Microsoft.Maps.Pushpin(vehicleLocation, { title: vehicle.vehicleID, color: randomColor() });
+                    _map.entities.push(vehiclePushpin);
+                }
+            });
+        }
+        else if (vehicleCoordinate && selectedVehicle && selectedVehicle.last_location.length > 0) {
+            const vehicleLocation = new window.Microsoft.Maps.Location(vehicleCoordinate[0], vehicleCoordinate[1]);
+            const vehiclePushpin = new window.Microsoft.Maps.Pushpin(vehicleLocation, { title: selectedVehicle.vehicleID });
+            _map.entities.push(vehiclePushpin);
+            _map.setView({ center: vehicleLocation });
+        };
     }
-    else if(vehicleCoordinate && selectedVehicle && selectedVehicle.last_location.length > 0) {
-      const vehicleLocation = new window.Microsoft.Maps.Location(vehicleCoordinate[0], vehicleCoordinate[1]);
-      const vehiclePushpin = new window.Microsoft.Maps.Pushpin(vehicleLocation, { title: selectedVehicle.vehicleID });
-      _map.entities.push(vehiclePushpin);
-      _map.setView({ center: vehicleLocation });
-    };
-  }
 
-  const stringToDate = (date_time) => {
-    if (date_time) {
-        const date = new Date(date_time);
-        return date.toLocaleString();
+    const stringToDate = (date_time) => {
+        if (date_time) {
+            const date = new Date(date_time);
+            return date.toLocaleString();
+        }
+        return "No details available";
     }
-    return "No details available";
-  }
 
 
-  return (
-    <> <Headers />
-    <div className= "vehicleData">
-        <div className="vehicleDataContainer">
-            <h2>Vehicle Data</h2>
-            <div className="vehicleList">
-                {vehicleData && vehicleData.map((vehicle) => (
-                    vehicle && <div key={vehicle.vehicleID} className={`vehicleItem ${selectedVehicle && selectedVehicle.vehicleID === vehicle.vehicleID ? 'selected' : ''}`} onClick={() => handleVehicleClick(vehicle)}>
-                        <span className="vehicleName">{vehicle.vehicleID}</span>
-                        {selectedVehicle && selectedVehicle.vehicleID === vehicle.vehicleID && (
-                            <div className="vehicleDetails">
-                                <p><strong>Location:</strong> {vehicle.last_location && vehicle.last_location.length > 0 ? `${vehicle.last_location[0]}, ${vehicle.last_location[1]}` : 'No details available'}</p>
-                                <p><strong>Max load:</strong> {vehicle.max_load}</p>
-                                <p><strong>Extra info:</strong> {vehicle.info} </p>
-                                <p><strong>Last Location Date and Time:</strong> {stringToDate(vehicle.last_location_date_time)}</p>
-                                <p><strong>Password:</strong> {vehicle.password}</p>
-                                <p>
-                                    <button onClick={() => handleUpdateClick(vehicle)}>Edit</button>
-                                    <button onClick={() => handleDeleteClick(vehicle._id)}>Delete</button>
-                                </p>
+    return (
+        <> <Headers />
+            <div className="vehicleData">
+                <div className="vehicleDataContainer">
+                    <h2>Vehicle Data</h2>
+                    <div className="vehicleList">
+                        {vehicleData && vehicleData.map((vehicle) => (
+                            vehicle && <div key={vehicle.vehicleID} className={`vehicleItem ${selectedVehicle && selectedVehicle.vehicleID === vehicle.vehicleID ? 'selected' : ''}`} onClick={() => handleVehicleClick(vehicle)}>
+                                <span className="vehicleName">{vehicle.vehicleID}</span>
+                                {selectedVehicle && selectedVehicle.vehicleID === vehicle.vehicleID && (
+                                    <div className="vehicleDetails">
+                                        <p><strong>Location:</strong> {vehicle.last_location && vehicle.last_location.length > 0 ? `${vehicle.last_location[0]}, ${vehicle.last_location[1]}` : 'No details available'}</p>
+                                        <p><strong>Max load:</strong> {vehicle.max_load}</p>
+                                        <p><strong>Extra info:</strong> {vehicle.info} </p>
+                                        <p><strong>Last Location Date and Time:</strong> {stringToDate(vehicle.last_location_date_time)}</p>
+                                        <p><strong>Password:</strong> {vehicle.password}</p>
+                                        <p>
+                                            <button onClick={() => handleUpdateClick(vehicle)}>Edit</button>
+                                            <button onClick={() => handleDeleteClick(vehicle._id)}>Delete</button>
+                                        </p>
+                                    </div>
+                                )}
                             </div>
-                        )}
+                        ))}
                     </div>
-                ))}
-            </div>
-            <div className="buttonsContainer">
-                <button id='showAllBtn' onClick={() => setShowAll(!showAll)}>{showAll ? 'Hide All' : 'Show All'}</button>
-                <button id='addVehicleBtn' onClick={handleAddVehicleClick}>Add Vehicle</button>
-            </div>
-            {showForm && (
-                <div className="vehicleForm">
-                    <input name="vehicleID" value={newVehicle.vehicleID} onChange={handleInputChange} placeholder="Vehicle ID" />
-                    <input name="max_load" value={newVehicle.max_load} onChange={handleInputChange} placeholder="Max Load" />
-                    <input name="info" value={newVehicle.info} onChange={handleInputChange} placeholder="Extra info" />
-                    <button onClick={handleSaveClick}>Save</button>
-                    <button onClick={handleCancelClick}>Cancel</button>
+                    <div className="buttonsContainer">
+                        <button id='showAllBtn' onClick={() => setShowAll(!showAll)}>{showAll ? 'Hide All' : 'Show All'}</button>
+                        <button id='addVehicleBtn' onClick={handleAddVehicleClick}>Add Vehicle</button>
+                    </div>
+                    {showForm && (
+                        <div className="vehicleForm">
+                            <input name="vehicleID" value={newVehicle.vehicleID} onChange={handleInputChange} placeholder="Vehicle ID" />
+                            <input name="max_load" value={newVehicle.max_load} onChange={handleInputChange} placeholder="Max Load" />
+                            <input name="info" value={newVehicle.info} onChange={handleInputChange} placeholder="Extra info" />
+                            <button onClick={handleSaveClick}>Save</button>
+                            <button onClick={handleCancelClick}>Cancel</button>
+                        </div>
+                    )}
                 </div>
-            )}
-        </div>
-        <div className="vehicleDataMapContainer">
-            <div id="myMapView"/>
-        </div>
-    </div>
-    </>
-  );
+                <div className="vehicleDataMapContainer">
+                    <div id="myMapView" />
+                </div>
+            </div>
+        </>
+    );
 };
 
 export default VehicleData;
