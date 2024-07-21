@@ -3,13 +3,15 @@ const express = require('express');
 const passport = require('passport');
 const router = express.Router();
 
+const appUrl = process.env.APP_URL;
+
 router.get("/auth/google", passport.authenticate("google", {
     scope: ["profile", "email"]
 }));
 
 router.get("/auth/google/callback", passport.authenticate("google", {
-    successRedirect: "http://localhost:3000/dashboard",
-    failureRedirect: "http://localhost:3000"
+    successRedirect: `${appUrl}/dashboard`,
+    failureRedirect: `${appUrl}`
 }));
 
 router.get("/login/success", (req, res) => {
@@ -33,7 +35,7 @@ router.get("/logout", (req, res) => {
         if (err) {
             return next(err);
         }
-        res.redirect("http://localhost:3000");
+        res.redirect(appUrl);
     });
 });
 
