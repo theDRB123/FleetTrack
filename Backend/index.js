@@ -81,7 +81,7 @@ passport.use(
     new OAuth2Strategy({
         clientID: clientid,
         clientSecret: clientsecret,
-        callbackURL: "http://localhost:4000/auth/google/callback",
+        callbackURL: `${appUrl}/auth/google/callback`,
         scope: ["profile", "email"]
     },
         async (accessToken, refreshToken, profile, done) => {
