@@ -33,7 +33,19 @@ const routeRoutes = require('./routes/routeRoutes');
 const driverRoutes = require('./routes/driverRoutes');
 const vehicleRoutes = require('./routes/vehicleRoutes');
 const tripRoutes = require('./routes/tripRoutes');
-
+const appUrl = process.env.APP_URL;
+//middleware
+app.use(cors({
+    origin: function (origin, callback) {
+        // allow requests with no origin
+        // (like mobile apps or curl requests)
+        console.log(origin);
+        if (!origin) return callback(null, true);
+        return callback(null, true);
+    },
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
+}));
 
 
 
@@ -51,17 +63,6 @@ const connectMongo = async () => {
 connectMongo();
 
 
-//middleware
-app.use(cors({
-    origin: function (origin, callback) {
-        // allow requests with no origin 
-        // (like mobile apps or curl requests)
-        if (!origin) return callback(null, true);
-        return callback(null, true);
-    },
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true
-}));
 app.use(express.json());
 
 //setup session
