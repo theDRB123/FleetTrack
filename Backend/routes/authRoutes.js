@@ -4,14 +4,15 @@ const passport = require('passport');
 const router = express.Router();
 
 const appUrl = process.env.APP_URL;
+const reactAppUrl = process.env.REACT_APP_URL;
 
 router.get("/auth/google", passport.authenticate("google", {
     scope: ["profile", "email"]
 }));
 
 router.get("/auth/google/callback", passport.authenticate("google", {
-    successRedirect: `${appUrl}/dashboard`,
-    failureRedirect: `${appUrl}`
+    successRedirect: `${reactAppUrl}/dashboard`,
+    failureRedirect: `${reactAppUrl}`
 }));
 
 router.get("/login/success", (req, res) => {
@@ -35,7 +36,7 @@ router.get("/logout", (req, res) => {
         if (err) {
             return next(err);
         }
-        res.redirect(appUrl);
+        res.redirect(reactAppUrl);
     });
 });
 
