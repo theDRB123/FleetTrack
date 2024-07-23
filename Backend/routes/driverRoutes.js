@@ -2,6 +2,8 @@
 const express = require('express');
 const generator = require('generate-password');
 const Driver = require('../models/driver');
+const Trip = require('../models/trip');
+const Vehicle = require('../models/vehicle');
 const checkAuthentication = require('../middleware/checkAuthentication');
 const router = express.Router();
 
@@ -91,6 +93,29 @@ router.get('/driverData', checkAuthentication, async (req, res) => {
         console.error(err);
         res.status(500).send('server error');
     }
+});
+
+router.post('/updateDriverLocation', async (req, res) => {
+    const data = req.body;
+    
+    const driver = await Driver.findOne({ driverID: data.driverID, password: data.password });
+    if (!driver) return res.status(404).send('Driver not found');
+    
+    var curTime = new Date().getTime();
+    const vehicleIds = await Trip.find({
+        userID: driver.userID,
+        driverId: driver._id,
+        $or: [
+            { tripStatus: { $ne: 'COMPLETED' }, trip_start_date_time: { $lt: curTime + 300000 } },
+            { tripStatus: 'RUNNING' }
+        ]
+    }).distinct('vehicleId');
+    
+    if (!vehicleIds) return res.status(404).send('No vehicles found');
+
+    curTime = new Date().getTime()
+    await Vehicle.updateMany({ _id: { $in: vehicleIds } }, { last_location: data.location, last_location_date_time: curTime });
+    res.status(200).send('Location updated');
 });
 
 module.exports = router;
