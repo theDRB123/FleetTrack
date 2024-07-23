@@ -3,6 +3,7 @@ const express = require('express');
 const Trip = require('../models/trip'); 
 const Driver = require('../models/driver');
 const Vehicle = require('../models/vehicle');
+const Route = require('../models/route');
 const checkAuthentication = require('../middleware/checkAuthentication');
 const router = express.Router();
 
@@ -59,7 +60,16 @@ router.get('/getDriverTrips', async (req, res) => {
 
     try {
         const trips = await Trip.find({ userID: userID, driverId: driver._id });
-        res.send(trips);
+        //create a new object
+        const newTrips = [];
+        //now get the estimated time and distance from the route using routeid and put it in the new object along with other details
+        for (let i = 0; i < trips.length; i++) {
+            const route = await Route.findOne({ routeID: trips[i].routeID });
+            //use ... operator to copy the object
+            newTrips.push({ ...trips[i]._doc, estimatedTime: route.estimatedTime, distance: route.distance });
+        }
+
+        res.send(newTrips);
     } catch (err) {
         console.error(err);
         res.status(500).send('Server error');
