@@ -58,7 +58,7 @@ router.get('/getDriverTrips', async (req, res) => {
     const userID = driver.userID;
 
     try {
-        const trips = await Trip.find({ userID: userID, driverId: data.driverId });
+        const trips = await Trip.find({ userID: userID, driverID: data.driverID });
         res.send(trips);
     } catch (err) {
         console.error(err);
