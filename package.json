@@ -3,6 +3,8 @@
     "@fortawesome/react-fontawesome": "github:fortawesome/react-fontawesome",
     "dotenv": "^16.4.5",
     "emailjs-com": "^3.2.0",
+    "react-router-dom": "^6.25.1",
+    "react-scroll": "^1.9.0",
     "react-toastify": "^10.0.5"
   }
 }
