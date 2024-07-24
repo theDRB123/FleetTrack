@@ -1,0 +1,67 @@
+/* Extras.css */
+.servicesPage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+    padding: 20px;
+  }
+  
+  .serviceItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    transition: transform 0.3s ease;
+  }
+  
+  .serviceItem:hover {
+    transform: translateY(-10px);
+  }
+  
+  .imageLeft {
+    flex-direction: row;
+  }
+  
+  .imageRight {
+    flex-direction: row-reverse;
+  }
+  
+  .serviceImage {
+    width: 200px;
+    height: auto;
+    border-radius: 8px;
+    margin: 0 20px;
+  }
+  
+  .serviceText {
+    flex: 1;
+  }
+  
+  .serviceText h2 {
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .serviceText p {
+    color: #666;
+    line-height: 1.6;
+  }
+  
+  @media (max-width: 768px) {
+    .serviceItem {
+      flex-direction: column;
+    }
+  
+    .imageLeft, .imageRight {
+      flex-direction: column;
+    }
+  
+    .serviceImage {
+      margin-bottom: 20px;
+    }
+  }
