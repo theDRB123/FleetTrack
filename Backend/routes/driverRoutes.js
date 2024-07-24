@@ -97,6 +97,7 @@ router.get('/driverData', checkAuthentication, async (req, res) => {
 
 router.post('/updateDriverLocation', async (req, res) => {
     const data = req.body;
+    console.log(data);
     
     const driver = await Driver.findOne({ driverID: data.driverID, password: data.password });
     if (!driver) return res.status(401).send('Driver not found');
