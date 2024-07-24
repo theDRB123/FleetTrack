@@ -59,14 +59,10 @@ router.get('/getDriverTrips', async (req, res) => {
     const userID = driver.userID;
 
     try {
-        //only return ifl, stringid, routeid, driverid, vehicleid, scheduled_date_time, trip_start_date_time, trip_end_date_time, last_route_point_index, tripStatus
         const trips = await Trip.find({ userID: userID, driverId: driver._id }, '_id userID tripId routeName routeId vehicleId scheduled_date_time trip_start_date_time trip_end_date_time last_route_point_index lastRoutePointIndex tripStatus estimatedTime distance');
-        //create a new object
         const newTrips = [];
-        //now get the estimated time and distance from the route using routeid and put it in the new object along with other details
         for (let i = 0; i < trips.length; i++) {
-            const route = await Route.findOne({ routeID: trips[i].routeID });
-            //use ... operator to copy the object
+            const route = await Route.findOne({ _id: trips[i].routeId });
             newTrips.push({ ...trips[i]._doc, estimatedTime: route.estimatedTime, distance: route.distance });
         }
 
