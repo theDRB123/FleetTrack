@@ -1,5 +1,6 @@
 import React from 'react';
 import './Extras.css';
+import serviceImg from '../assets/services.png'
 
 const services = [
   {
@@ -20,17 +21,17 @@ const services = [
     id: 3,
     title: 'Vehicle Maintenance',
     description: 'Stay ahead of maintenance needs with predictive alerts, keeping your fleet in top condition.',
-    image: '/images/vehicle-maintenance.jpg',
+    image: 'serviceImg',
     imagePosition: 'left',
   },
 ];
 
-const ServicesPage = () => {
+const Extras = () => {
   return (
     <div className="servicesPage">
       {services.map((service, index) => (
         <div key={service.id} className={`serviceItem ${service.imagePosition === 'left' ? 'imageLeft' : 'imageRight'}`}>
-          <img src={service.image} alt={service.title} className="serviceImage" />
+          <img src={serviceImg} alt={service.title} className="serviceImage" />
           <div className="serviceText">
             <h2>{service.title}</h2>
             <p>{service.description}</p>
