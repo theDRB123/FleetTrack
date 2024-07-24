@@ -99,7 +99,7 @@ router.post('/updateDriverLocation', async (req, res) => {
     const data = req.body;
     
     const driver = await Driver.findOne({ driverID: data.driverID, password: data.password });
-    if (!driver) return res.status(404).send('Driver not found');
+    if (!driver) return res.status(401).send('Driver not found');
     
     var curTime = new Date().getTime();
     const vehicleIds = await Trip.find({
@@ -111,7 +111,7 @@ router.post('/updateDriverLocation', async (req, res) => {
         ]
     }).distinct('vehicleId');
     
-    if (!vehicleIds) return res.status(404).send('No vehicles found');
+    if (!vehicleIds) return res.status(202).send('No vehicles found');
 
     curTime = new Date().getTime()
     await Vehicle.updateMany({ _id: { $in: vehicleIds } }, { last_location: data.location, last_location_date_time: curTime });
