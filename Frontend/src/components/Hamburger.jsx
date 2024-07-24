@@ -15,9 +15,9 @@ const Hamburger = () => {
   return (
     <div className="hamburger-menu">
       <div className="menu-icon" onClick={toggleMenu}>
-        <div className={menuOpen ? "line line1" : "line"}></div>
-        <div className={menuOpen ? "line line2" : "line"}></div>
-        <div className={menuOpen ? "line line3" : "line"}></div>
+        <div className={menuOpen ? "hline hline1" : "hline"}></div>
+        <div className={menuOpen ? "hline hline2" : "hline"}></div>
+        <div className={menuOpen ? "hline hline3" : "hline"}></div>
       </div>
       <div className={`slide-menu ${menuOpen ? 'open' : ''}`}>
         <button className="menu-button-open" onClick={toggleMenu}>🡠</button>
