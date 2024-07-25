@@ -6,7 +6,7 @@ import About from './components/About';
 import ContactUs from './components/Contact';
 import Services from './components/Services';
 import Extras from './components/Extras'
-import { Routes, Route } from 'react-router-dom'; ;
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 const Home = () => {
   return (
@@ -15,15 +15,16 @@ const Home = () => {
       <Header />
       <div id="about"><About /></div>
       <div id="services"><Services /></div>
+      <div id="extras"><Extras /></div>
       <div id="contact"><ContactUs /></div>
 
-      <div className="App">
-        <Header />
+      {/* <div className="App">
         <Routes>
         <Route path="/extras" element={<Extras />} />
         </Routes>
 
-      </div>
+      </div> */}
+      
 
       <Footer />
     </>
