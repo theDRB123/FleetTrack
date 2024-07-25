@@ -141,7 +141,7 @@ const ViewRoutes = ({ routeId, vehicleCoordinate, liveLocation }) => {
           liveLocation = false;
         }
       }
-    }, 20000);
+    }, 10000);
   }
 
   const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
