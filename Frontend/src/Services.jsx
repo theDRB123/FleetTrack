@@ -6,7 +6,7 @@ import Headers from './Navbar';
 const Services = () => {
     return (
         <div>
-            <div className="dashNavbar"><Headers /></div>
+            {/* <div className="dashNavbar"><Headers /></div> */}
             <div className="services-container" style={{ display: "flex", alignItems: "center" }}>
             <div className="services-content">
                 <h1>Our Services</h1>
