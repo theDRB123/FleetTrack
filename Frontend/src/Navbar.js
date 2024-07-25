@@ -48,7 +48,7 @@ const Navbar = () => {
           <a href="" className="nav-link">Home</a>
           <a href="#about" className="nav-link">About</a>
           <a href="#contact" className="nav-link">Contact</a>
-          <NavLink to="#services" className="nav-link">Services</NavLink>
+          <a href="#services" className="nav-link">Services</a>
           {Object.keys(userdata).length > 0 ? (
             <>
               <span className="nav-user">{userdata.displayName}</span>
