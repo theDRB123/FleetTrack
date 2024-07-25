@@ -34,12 +34,16 @@ router.post('/addTripData', checkAuthentication, async (req, res) => {
         routeName: data.routeName,
         vehicleId: data.vehicleId,
         driverId: data.driverId,
+        routeId: data.routeId,
         info: data.info,
         scheduled_date_time: data.scheduled_date_time,
         trip_start_date_time: data.trip_start_date_time,
         trip_end_date_time: data.trip_end_date_time,
-        last_route_point_index: data.last_route_point_index,
-        tripStatus: data.tripStatus
+        last_route_point_index: 0,
+        tripStatus: "SCHEDULED",
+        time_threshold: data.time_threshold,
+        distance_threshold_KM: data.distance_threshold_KM,
+        alert_threshold: data.alert_threshold,
     });
 
     try {
@@ -52,10 +56,41 @@ router.post('/addTripData', checkAuthentication, async (req, res) => {
     }
 });
 
+router.post('/updateTripStatus', checkAuthentication, async (req, res) => {
+    const data = req.body;
+    if(!data)
+    {
+        return res.status(400).send('Invalid data');
+    }
+    // console.log(data);
+    if(data.tripStatus == 'COMPLETED') {
+        const trip = await Trip.findOneAndUpdate(
+            { userID: req.user.googleId, _id: data.tripId },
+            { tripStatus: data.tripStatus, trip_end_date_time: new Date().getTime() },
+            { new: true }
+        );
+        return res.status(200).send('Trip completed');
+    }
+    else if(data.tripStatus == 'RUNNING') {
+        const trip = await Trip.findOneAndUpdate(
+            { userID: req.user.googleId, _id: data.tripId },
+            { tripStatus: data.tripStatus, trip_start_date_time: new Date().getTime() },
+            { new: true }
+        );
+        return res.status(200).send('Trip started');
+    }
+    else {
+        return res.status(400).send('Invalid trip status');
+    }
+});
+
 router.get('/getDriverTrips', async (req, res) => {
     console.log("Getting Driver Trips");
     const data = req.query;
     const driver = await Driver.findOne({ driverID: data.driverID, password: data.password });
+    if (!driver) {
+        return res.status(401).send('Invalid driver');
+    };
     const userID = driver.userID;
 
     try {
@@ -63,7 +98,9 @@ router.get('/getDriverTrips', async (req, res) => {
         const newTrips = [];
         for (let i = 0; i < trips.length; i++) {
             const route = await Route.findOne({ _id: trips[i].routeId });
-            newTrips.push({ ...trips[i]._doc, estimatedTime: route.estimatedTime, distance: route.distance });
+            if (route) {
+                newTrips.push({ ...trips[i]._doc, estimatedTime: route.estimatedTime, distance: route.distance });;
+            }
         }
 
         res.send(newTrips);
