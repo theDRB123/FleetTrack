@@ -39,7 +39,7 @@ const Navbar = () => {
   return (
     <header className="navbar">
       <nav className="navbar-container">
-        <Hamburger />
+      {Object.keys(userdata).length > 0 ? (<Hamburger />) : null}
         <div className="navbar-brand">
           <h1>FleetTrack</h1>
         </div>

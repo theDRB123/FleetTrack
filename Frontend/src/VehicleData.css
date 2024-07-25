@@ -29,6 +29,10 @@
     overflow: hidden;
     height: 90vh;
   }
+
+  .vehicleList p{
+    color: #2c3e50;
+}
   
   .vehicleItem {
     padding: 15px;
