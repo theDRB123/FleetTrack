@@ -119,7 +119,7 @@ const VehicleData = () => {
     const handleCancelClick = () => {
         setShowForm(false);
         setUpdateForm(false);
-        setNewVehicle({ _id: '', vehicleID: '', max_load: '', last_location: [], last_location_date_time: new Date.now(), info: '' });
+        setNewVehicle({ _id: '', vehicleID: '', max_load: '', last_location: [], last_location_date_time: '', info: '' });
     };
 
     window.loadMapModule = async () => {
@@ -205,8 +205,8 @@ const VehicleData = () => {
                             <input name="vehicleID" value={newVehicle.vehicleID} onChange={handleInputChange} placeholder="Vehicle ID" />
                             <input name="max_load" value={newVehicle.max_load} onChange={handleInputChange} placeholder="Max Load" />
                             <input name="info" value={newVehicle.info} onChange={handleInputChange} placeholder="Extra info" />
-                            <button onClick={handleSaveClick}>Save</button>
-                            <button onClick={handleCancelClick}>Cancel</button>
+                            <button onClick={handleSaveClick} className="saveButton">Save</button>
+                            <button onClick={handleCancelClick} className="cancelButton">Cancel</button>
                         </div>
                     )}
                 </div>

@@ -150,8 +150,8 @@ const DriverData = () => {
                             <input name="name" value={newDriver.name} onChange={handleInputChange} placeholder="Driver Name" />
                             <input name="mobile" value={newDriver.mobile} onChange={handleInputChange} placeholder="Mobile Number" />
                             <input name="info" value={newDriver.info} onChange={handleInputChange} placeholder="Extra info" />
-                            <button onClick={handleSaveClick}>Save</button>
-                            <button onClick={handleCancelClick}>Cancel</button>
+                            <button onClick={handleSaveClick} className="saveButton">Save</button>
+                            <button onClick={handleCancelClick} className="cancelButton">Cancel</button>
                         </div>
                     )}
                 </div>
