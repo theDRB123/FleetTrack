@@ -132,13 +132,13 @@ app.use(vehicleRoutes);
 app.use(tripRoutes);
 
 
-const MONITOR_INTERVAL = 10000; // 10 seconds
-const THRESHOLD = 10000; // 10 seconds
-
-setInterval(() => {
-    monitorVehicles(THRESHOLD);
-}, MONITOR_INTERVAL);
-
+const MONITOR_INTERVAL = 10000; // 10 second
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
 });
+
+const recent_alerts = new Map();
+setInterval(() => {
+    monitorVehicles(recent_alerts);
+}, MONITOR_INTERVAL);
+

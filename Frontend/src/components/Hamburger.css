@@ -11,22 +11,22 @@
     height: 25px;
   }
   
-  .line {
+  .hline {
     background-color: cyan;
     height: 3px;
     width: 100%;
     transition: all 0.3s ease;
   }
   
-  .line1 {
+  .hline1 {
     transform: translateY(8px) rotate(0);
   }
   
-  .line2 {
+  .hline2 {
     opacity: 1;
   }
   
-  .line3 {
+  .hline3 {
     transform: translateY(-8px) rotate(0);
   }
   
@@ -77,15 +77,15 @@
     text-align: left;
   }
   
-  .line1 {
+  .hline1 {
     transform: translateY(11px) rotate(45deg);
   }
   
-  .line2 {
+  .hline2 {
     opacity: 0;
   }
   
-  .line3 {
+  .hline3 {
     transform: translateY(-11px) rotate(-45deg);
   }
 

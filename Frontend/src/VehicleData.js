@@ -119,7 +119,7 @@ const VehicleData = () => {
     const handleCancelClick = () => {
         setShowForm(false);
         setUpdateForm(false);
-        setNewVehicle({ _id: '', vehicleID: '', max_load: '', last_location: [], last_location_date_time: new Date.now(), info: '' });
+        setNewVehicle({ _id: '', vehicleID: '', max_load: '', last_location: [], last_location_date_time: '', info: '' });
     };
 
     window.loadMapModule = async () => {

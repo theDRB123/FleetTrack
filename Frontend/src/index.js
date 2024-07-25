@@ -12,6 +12,9 @@ import ErrorBoundary from './ErrorBoundary';
 import VehicleData from './VehicleData';
 import DriverData from './DriverData';
 import Home from './Home';
+import About from './About';
+import ContactUs from './Contact';
+import Services from './Services';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -36,6 +39,9 @@ root.render(
         <Route path="/VehicleData" element={<VehicleData />} />
         <Route path="/DriverData" element={<DriverData />} />
         <Route path="/ViewDriverRoutes" element={<ViewDriverRoutes />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<ContactUs />} />
+        <Route path="/services" element={<Services />} />
         <Route path="/" element={<Home />} />
       </Routes>
     </Router>
