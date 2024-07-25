@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import emailjs from 'emailjs-com';
 import './Contact.css';
-import contactimg from '../assets/contactus.png';
+import contactimg from './assets/contactus.png';
+import Headers from './Navbar';
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -41,7 +42,9 @@ const ContactUs = () => {
   };
 
   return (
-    <div className="contact-us-container" style={{ display: 'flex', alignItems: 'center' }}>
+    <div>
+      <div className="dashNavbar"><Headers /></div>
+      <div className="contact-us-container" style={{ display: 'flex', alignItems: 'center' }}>
       <div className="contact-us-content">
         <h1>Contatct - Us</h1>
         </div>
@@ -64,6 +67,7 @@ const ContactUs = () => {
           <button type="submit" className="submit-button">Submit</button>
         </form>
       </div>
+    </div>
     </div>
   );
 };
