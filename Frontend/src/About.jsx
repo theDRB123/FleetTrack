@@ -9,6 +9,7 @@ const About = () => {
         <div>
             {/* <div className="dashNavbar"><Headers /></div> */}
             <div className="about" id="about">
+                <img src={fleetTrackLogo}></img>
                 <p className="aboutTitle aboutContent"><b>Welcome to FleetTrack, your all-in-one fleet management solution!</b></p>
                 <p className="aboutbody aboutContent">FleetTrack is a fleet management system that helps businesses manage their vehicles and drivers. Our software provides real-time tracking, route optimization, and analytics to help you make data-driven decisions.
                 With FleetTrack, you can monitor your fleet's performance, reduce costs, and improve customer satisfaction. Our platform is easy to use and customizable to meet your business needs.
