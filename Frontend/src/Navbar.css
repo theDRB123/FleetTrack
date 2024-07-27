@@ -195,11 +195,12 @@
   margin-left: 1rem;
 }
 
-/* Responsive Styles */
 @media (max-width: 768px) {
   .navbar-container {
     flex-direction: column;
     align-items: flex-start;
+    height: auto;
+    /* width: 100%; */
   }
 
   .navbar-links {
@@ -221,6 +222,10 @@
 }
 
 @media (max-width: 480px) {
+  .navbar-container {
+    height: auto;
+  }
+
   .navbar-brand h1 {
     font-size: 1.25rem;
   }
@@ -231,7 +236,6 @@
   }
 
   .nav-user-image {
-    width: 30px;
-    height: 30px;
+    display: none;
   }
 }
