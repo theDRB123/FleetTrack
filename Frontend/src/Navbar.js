@@ -40,12 +40,12 @@ const Navbar = () => {
   return (
     <header className="navbar">
       <nav className="navbar-container">
-      {Object.keys(userdata).length == 0 ? (<Hamburger />) : null}
+      {Object.keys(userdata).length == 0 ? (<Hamburger />) : <Hamburger/>}
         <div className="navbar-brand">
           <h1>FleetTrack</h1>
         </div>
         <div className="navbar-links">
-          <a href="" className="nav-link">Home</a>
+          <a href="/" className="nav-link">Home</a>
           <a href="#about" className="nav-link">About</a>
           <a href="#contact" className="nav-link">Contact</a>
           <a href="#services" className="nav-link">Services</a>
