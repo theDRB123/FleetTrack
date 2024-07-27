@@ -1,3 +1,8 @@
 .header-sidebar-container {
     display: flex;
   }
+
+  .nav{
+    position: absolute;
+    top: 0;
+  }

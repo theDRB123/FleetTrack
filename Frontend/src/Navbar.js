@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Navbar.css';
 import Hamburger from './components/Hamburger';
+// import { FaBars } from 'react-icons/fa';
 const apiUrl = process.env.REACT_APP_API_URL;
 console.log("apiUrl", apiUrl);
 const useUserData = () => {
@@ -39,15 +40,15 @@ const Navbar = () => {
   return (
     <header className="navbar">
       <nav className="navbar-container">
-      {Object.keys(userdata).length > 0 ? (<Hamburger />) : null}
+      {Object.keys(userdata).length == 0 ? (<Hamburger />) : <Hamburger/>}
         <div className="navbar-brand">
           <h1>FleetTrack</h1>
         </div>
         <div className="navbar-links">
-          <NavLink to="/" className="nav-link">Home</NavLink>
-          <NavLink to="/about" className="nav-link">About</NavLink>
-          <NavLink to="/contact" className="nav-link">Contact</NavLink>
-          <NavLink to="/services" className="nav-link">Services</NavLink>
+          <a href="/" className="nav-link">Home</a>
+          <a href="#about" className="nav-link">About</a>
+          <a href="#contact" className="nav-link">Contact</a>
+          <a href="#services" className="nav-link">Services</a>
           {Object.keys(userdata).length > 0 ? (
             <>
               <span className="nav-user">{userdata.displayName}</span>

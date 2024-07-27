@@ -43,7 +43,7 @@ const ContactUs = () => {
 
   return (
     <div>
-      <div className="dashNavbar"><Headers /></div>
+      {/* <div className="dashNavbar"><Headers /></div> */}
       <div className="contact-us-container" style={{ display: 'flex', alignItems: 'center' }}>
       <div className="contact-us-content">
         <h1>Contatct - Us</h1>

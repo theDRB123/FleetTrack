@@ -1,12 +1,13 @@
 import React from "react";
 import "./Services.css";
 import serviceimg from "./assets/serviceimg.png";
-import Headers from './Navbar';
+// import Headers from './Navbar';
+import Extras from "./components/Extras";
 
 const Services = () => {
     return (
         <div>
-            <div className="dashNavbar"><Headers /></div>
+            {/* <div className="dashNavbar"><Headers /></div> */}
             <div className="services-container" style={{ display: "flex", alignItems: "center" }}>
             <div className="services-content">
                 <h1>Our Services</h1>
@@ -14,6 +15,7 @@ const Services = () => {
             </div>
             <img src={serviceimg} alt="services" />
         </div>
+        <Extras />
         </div>
     );
 }
