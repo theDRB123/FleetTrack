@@ -3,8 +3,7 @@ const User = require('./models/user.js');
 const Trip = require('./models/trip.js');
 const Route = require('./models/route.js');
 const sendEmail = require('./sendMail');
-const minimumDistanceInKm = require('./geofencing.js');
-
+const { minimumDistanceInKm, minimumDistanceInKmComplete } = require('./geofencing.js');
 
 const updateIndex = async (tripId, new_index) => {
     await Trip.findOneAndUpdate(
@@ -21,14 +20,14 @@ const monitorVehicles = async (recentAlerts) => {
     const currentTime = new Date().getTime();
 
     const trips = await Trip.find({ tripStatus: { $eq: 'RUNNING' } }).select('vehicleId userID time_threshold distance_threshold_KM alert_threshold routeId last_route_point_index');
-    
-    
-    for(const trip of trips){
+
+
+    for (const trip of trips) {
         const vehicle = await Vehicle.findOne({ _id: trip.vehicleId });
         const t_threshold = trip.time_threshold;
         const d_threshold = trip.distance_threshold_KM;
         const a_threshold = trip.alert_threshold;
-        
+
 
         if (recentAlerts.get(vehicle.vehicleID) === undefined) {
             recentAlerts.set(vehicle.vehicleID, currentTime - a_threshold - 1);
@@ -53,8 +52,16 @@ const monitorVehicles = async (recentAlerts) => {
             const location = vehicle.last_location;
             // console.log("last location: " + location.lat + " " + location.lng);
             const last_index = trip.last_route_point_index;
-            let routeData = await Route.findOne({ _id: trip.routeId });
+
+            let [routeData, length] = getRouteData(false);
+
+
             let [isValid, new_index] = await minimumDistanceInKm(location, last_index, routeData.coords, d_threshold);
+            if (!isValid) {
+                routeData = await Route.findOne({ _id: trip.routeId });
+                [isValid, new_index] = await minimumDistanceInKmComplete(location, routeData.coords, d_threshold);
+            }
+
             updateIndex(trip.tripId, new_index);
 
             if (!isValid) {
@@ -87,6 +94,24 @@ const sendAlert = async (vehicle, email, Type) => {
     //email disabled for now
     // await sendEmail(vehicle.userID, vehicle.vehicleID, email.email, Type);
     console.log(`Alert sent to ${email.email} about vehicle ${vehicle.vehicleID} | Type -> ${Type}`);
+}
+
+const getRouteData = async (routeId, fullData) => {
+
+    const pipeline = [
+        { $match: { _id: routeId } },
+        { $project: { coordsSize: { $size: "$coords" } } }
+    ]
+    let length = await Route.aggregate(pipeline);
+    let last_index = length[0].coordsSize;
+
+    let routeData;
+    if (!fullData) {
+        routeData = await Route.findOne({ _id: trip.routeId }, { coords: { $slice: [last_index - 10, 20] } });
+    } else {
+        routeData = await Route.findOne({ _id: trip.routeId });
+    }
+    return [routeData, length];
 }
 
 module.exports = monitorVehicles;

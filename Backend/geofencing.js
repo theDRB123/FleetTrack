@@ -15,6 +15,10 @@ function rad2deg(rad) {
     return rad * (180 / Math.PI)
 }
 
+const minimumDistanceInKM_OnPlaceInterpolation = async (position, lastIndex, routeData, threshold) => {
+
+}
+
 const minimumDistanceInKm = async (position, lastIndex, routeData, threshold) => {
     // get the minimum distance from -10 to +10 of last index, in kilometers
     let minDistance = 1000000;
@@ -32,10 +36,16 @@ const minimumDistanceInKm = async (position, lastIndex, routeData, threshold) =>
     }
     if (minDistance < threshold) {
         return [true, min_Distance_Index];
+    } else {
+        return [false, min_Distance_Index];
     }
-    //otherwise iterate for all the points
-    for (let i = 0; i < routeData.length; i++) {
+}
 
+const minimumDistanceInKmComplete = async (position, routeData, threshold) => {
+    let minDistance = 1000000;
+    let min_Distance_Index = -1;
+    console.log(routeData);
+    for (let i = 0; i < routeData.length; i++) {
         let distance = getDistanceFromLatLonInKm(position[0], position[1], routeData[i][0], routeData[i][1]);
         if (distance < minDistance) {
             minDistance = distance;
@@ -43,13 +53,12 @@ const minimumDistanceInKm = async (position, lastIndex, routeData, threshold) =>
         }
     }
 
-    if(minDistance < threshold) {
+    if (minDistance < threshold) {
         return [true, min_Distance_Index];
     } else {
         return [false, min_Distance_Index];
     }
 }
-
 
 const convertToCartesian = (lat, long) => {
     const x = Math.cos(lat) * Math.cos(long);
@@ -58,4 +67,4 @@ const convertToCartesian = (lat, long) => {
     return { x, y, z };
 }
 
-module.exports = minimumDistanceInKm;
+module.exports = { minimumDistanceInKm, minimumDistanceInKmComplete};
