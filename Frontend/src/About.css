@@ -71,22 +71,36 @@
   justify-content: center;
 }
 
+/* Media Queries */
 @media (max-width: 768px) {
   .about {
+    flex-direction: column;
     padding: 10px;
   }
 
-  .about-logo {
-    width: 150px;
+  .about img, .aboutTitle, .aboutbody {
+    width: 100%;
   }
 
-  h2 {
-    font-size: 24px;
+  .aboutContent {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .about {
+    padding: 5px;
   }
 
-  p {
+  .about-button {
+    padding: 5px 10px;
     font-size: 14px;
-    margin-left: 20px;
-    margin-right: 20px;
+  }
+
+  .aboutContent {
+    font-size: 14px;
+    margin-left: 5px;
+    margin-right: 5px;
   }
 }
