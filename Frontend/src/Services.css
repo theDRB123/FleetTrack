@@ -30,3 +30,58 @@ img {
     height: auto; 
     border-radius: 8px; 
 }
+
+@media only screen and (max-width: 600px) {
+    .services-container {
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .services-content h1 {
+        font-size: 2rem;
+    }
+
+    .services-content p {
+        font-size: 1rem;
+    }
+
+    img {
+        max-width: 100%;
+    }
+}
+
+@media only screen and (min-width: 601px) and (max-width: 768px) {
+    .services-container {
+        padding: 30px;
+    }
+
+    .services-content h1 {
+        font-size: 2.2rem;
+    }
+
+    .services-content p {
+        font-size: 1.1rem;
+    }
+
+    img {
+        max-width: 75%;
+    }
+}
+
+@media only screen and (min-width: 769px) {
+    .services-container {
+        padding: 50px;
+    }
+
+    .services-content h1 {
+        font-size: 2.5rem;
+    }
+
+    .services-content p {
+        font-size: 1.2rem;
+    }
+
+    img {
+        max-width: 50%;
+    }
+}
