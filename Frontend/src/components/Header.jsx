@@ -9,7 +9,7 @@ const Header = () => {
                 <h2>Track your fleet with ease</h2>
                 <p>Monitor your vehicles in real-time and optimize your routes with Fleet-Track.</p>
                 {/* <button className='getstr' onClick={() => window.location.href='../components/Extras'}>Get Started</button> */}
-                <Link to="/Frontend/src/components/Extras" className='getstr'>Get Started</Link>
+                {/* <Link to="/Extras" className='getstr'>Get Started</Link> */}
             </div>
             <div className='header-contents'>
                 <h2>Fleet-Track</h2>

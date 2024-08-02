@@ -130,7 +130,10 @@ const Dashboard = () => {
 
   const handleSaveClick = async () => {
     //get the tripId from the max tripId and increment it by 1
-    const maxTripId = Math.max(...tripData.map(trip => trip.tripId));
+    var maxTripId = 0;
+    if(tripData.length > 0) {
+      maxTripId = Math.max(...tripData.map(trip => trip.tripId))
+    };
     const estTime = routeData.find(route => route._id === newTrip.routeId).estimatedTime;
 
     const newTripData = {

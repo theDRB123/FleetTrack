@@ -2,13 +2,7 @@ html, body{
     padding:0;
     margin:0;
     height:100%;
-    color: black;
 }
-
-*{
-    color: black;
-}
-
 
 .container{
     position: relative;
