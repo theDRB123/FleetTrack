@@ -9,11 +9,18 @@ const About = () => {
         <div>
             <div className="dashNavbar"><Headers /></div>
             <div className="about" id="about">
-                <p className="aboutTitle aboutContent"><b>Welcome to FleetTrack, your all-in-one fleet management solution!</b></p>
-                <p className="aboutbody aboutContent">FleetTrack is a fleet management system that helps businesses manage their vehicles and drivers. Our software provides real-time tracking, route optimization, and analytics to help you make data-driven decisions.
+                <img src={fleetTrackLogo}></img>
+                {/* <p className="aboutTitle aboutContent"><b>Welcome to FleetTrack, your all-in-one fleet management solution!</b></p> */}
+                <p className="aboutbody aboutContent">
+                <b>Welcome to FleetTrack, your all-in-one fleet management solution!</b>
+                <p></p>
+                FleetTrack is a fleet management system that helps businesses manage their vehicles and drivers. Our software provides real-time tracking, route optimization, and analytics to help you make data-driven decisions.
                 With FleetTrack, you can monitor your fleet's performance, reduce costs, and improve customer satisfaction. Our platform is easy to use and customizable to meet your business needs.
-                Get started with FleetTrack today and take your fleet management to the next level!</p>
+                Get started with FleetTrack today and take your fleet management to the next level!
+                <p></p>
                 <NavLink to="/services" className="about-button">Learn More</NavLink>
+                </p>
+                
             </div>
         </div>
     );
