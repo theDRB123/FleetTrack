@@ -9,14 +9,12 @@ const Home = () => {
   return (
     <>
       <Navbar />
-      <Header />
 
       <div className="App">
         <Header />
         <Routes>
         <Route path="/extras" element={<Extras />} />
         </Routes>
-
       </div>
 
       <Footer />
